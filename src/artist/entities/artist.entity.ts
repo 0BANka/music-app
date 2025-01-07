@@ -8,26 +8,23 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Product {
+export class Artist {
   @PrimaryGeneratedColumn()
   id: string;
 
   @Column()
-  title: string;
+  name: string;
 
   @Column()
-  price: number;
+  info: string;
 
   @Column({ nullable: true })
-  description?: string;
+  photo?: string;
 
-  @Column({ nullable: true })
-  image?: string;
+  // @ManyToOne(() => Category)
+  // @JoinColumn({ name: 'categoryId' })
+  // category: Category;
 
-  @ManyToOne(() => Category)
-  @JoinColumn({ name: 'categoryId' })
-  category: Category;
-
-  @Column({ nullable: true })
-  categoryId?: string;
+  // @Column({ nullable: true })
+  // categoryId?: string;
 }

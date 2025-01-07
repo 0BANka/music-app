@@ -14,7 +14,7 @@ export class CreateArtistDto {
   @Expose()
   @IsNotEmpty({ message: 'Укажите информацию о исполнителе' })
   @IsString({ message: 'Информация о исполнителе должна быть строкой' })
-  information!: number;
+  info!: number;
 
   // @Expose()
   // @IsNotEmpty({ message: 'Укажите категорию продукта' })
