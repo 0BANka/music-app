@@ -15,7 +15,7 @@ export class CreateAlbumDto {
   @Expose()
   @IsNotEmpty({ message: 'Укажите исполнителя альбома' })
   @IsNumberString({}, { message: 'Укажите корректный id исполнителя' })
-  categoryId!: string;
+  artistId!: string;
 
   @Expose()
   @IsNotEmpty({ message: 'Укажите год выпуска альбома' })
