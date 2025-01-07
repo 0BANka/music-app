@@ -13,7 +13,7 @@ import {
 import { AlbumService } from './album.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { storage } from './storageConfig';
+import { storage } from '../storageConfig';
 
 @Controller('albums')
 export class AlbumController {

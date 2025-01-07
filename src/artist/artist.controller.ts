@@ -9,7 +9,7 @@ import {
 import { ArtistService } from './artist.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { storage } from './storageConfig';
+import { storage } from '../storageConfig';
 
 @Controller('artists')
 export class ArtistController {

@@ -1,11 +1,4 @@
-import { Category } from 'src/category/entities/category.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Artist {
@@ -20,11 +13,4 @@ export class Artist {
 
   @Column({ nullable: true })
   photo?: string;
-
-  // @ManyToOne(() => Category)
-  // @JoinColumn({ name: 'categoryId' })
-  // category: Category;
-
-  // @Column({ nullable: true })
-  // categoryId?: string;
 }
