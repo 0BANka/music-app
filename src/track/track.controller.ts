@@ -3,19 +3,15 @@ import {
   Get,
   Post,
   Body,
-  UseInterceptors,
-  UploadedFile,
   HttpException,
-  Param,
   HttpStatus,
   Query,
 } from '@nestjs/common';
 import { TrackService } from './track.service';
 import { CreateTrackDto } from './dto/create-track.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('tracks')
-export class AlbumController {
+export class TrackController {
   constructor(private readonly trackService: TrackService) {}
 
   @Post()
@@ -32,6 +28,6 @@ export class AlbumController {
       );
     }
 
-    return this.trackService.findAll(artist, album);
+    return this.trackService.findAll(album, artist);
   }
 }
