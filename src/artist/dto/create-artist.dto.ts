@@ -15,9 +15,4 @@ export class CreateArtistDto {
   @IsNotEmpty({ message: 'Укажите информацию о исполнителе' })
   @IsString({ message: 'Информация о исполнителе должна быть строкой' })
   info!: string;
-
-  // @Expose()
-  // @IsNotEmpty({ message: 'Укажите категорию продукта' })
-  // @IsNumberString({}, { message: 'Укажите корректную категорию' })
-  // categoryId: string;
 }
