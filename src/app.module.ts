@@ -1,19 +1,19 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ProductModule } from './product/product.module';
+import { ArtistModule } from './artist/artist.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
 import { CategoryModule } from './category/category.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Product } from './product/entities/product.entity';
+import { Artist } from './artist/entities/artist.entity';
 import { Category } from './category/entities/category.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    ProductModule,
+    ArtistModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
     }),
@@ -24,7 +24,7 @@ import { Category } from './category/entities/category.entity';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [Product, Category],
+      entities: [Artist],
       synchronize: true,
     }),
     CategoryModule,
