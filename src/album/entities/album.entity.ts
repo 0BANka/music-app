@@ -12,6 +12,9 @@ export class Album {
   @PrimaryGeneratedColumn()
   id: string;
 
+  @Column()
+  name: string;
+
   @ManyToOne(() => Artist)
   @JoinColumn({ name: 'artistId' })
   artist: Artist;

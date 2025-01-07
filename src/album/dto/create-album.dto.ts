@@ -8,8 +8,8 @@ import {
 
 export class CreateAlbumDto {
   @Expose()
-  @IsNotEmpty({ message: 'Укажите имя исполнителя' })
-  @IsString({ message: 'Имя исполнителя должно быть строкой' })
+  @IsNotEmpty({ message: 'Укажите название альбома' })
+  @IsString({ message: 'Название альбома должно быть строкой' })
   name!: string;
 
   @Expose()
