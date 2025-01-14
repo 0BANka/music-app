@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { nanoid } from 'nanoid';
 
 @Entity()
 export class User {
@@ -15,6 +16,6 @@ export class User {
   token?: string;
 
   generateToken() {
-    this.token = crypto.randomUUID();
+    this.token = nanoid();
   }
 }
