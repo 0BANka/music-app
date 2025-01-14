@@ -11,6 +11,8 @@ import { AlbumModule } from './album/album.module';
 import { Album } from './album/entities/album.entity';
 import { Track } from './track/entities/track.entity';
 import { TrackModule } from './track/track.module';
+import { UserModule } from './user/user.module';
+import { User } from './user/entities/user.entity';
 
 @Module({
   imports: [
@@ -26,11 +28,12 @@ import { TrackModule } from './track/track.module';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [Artist, Album, Track],
+      entities: [Artist, Album, Track, User],
       synchronize: true,
     }),
     AlbumModule,
     TrackModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
