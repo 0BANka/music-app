@@ -1,34 +1,32 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Headers,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { TrackHistoryService } from './track-history.service';
 import { CreateTrackHistoryDto } from './dto/create-track-history.dto';
-import { UpdateTrackHistoryDto } from './dto/update-track-history.dto';
 
-@Controller('track-history')
+@Controller('track_history')
 export class TrackHistoryController {
   constructor(private readonly trackHistoryService: TrackHistoryService) {}
 
   @Post()
-  create(@Body() createTrackHistoryDto: CreateTrackHistoryDto) {
-    return this.trackHistoryService.create(createTrackHistoryDto);
-  }
+  async getSecretMessage(
+    @Headers() headers: { authorization: string },
+    @Body() createTrackHistoryDto: CreateTrackHistoryDto,
+  ) {
+    if (!headers.authorization) {
+      throw new UnauthorizedException('Вы не авторизованы');
+    }
+    const user = await this.trackHistoryService.getUserByToken(
+      headers.authorization,
+    );
+    if (!user) {
+      throw new UnauthorizedException('Пользователь не найден');
+    }
 
-  @Get()
-  findAll() {
-    return this.trackHistoryService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.trackHistoryService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTrackHistoryDto: UpdateTrackHistoryDto) {
-    return this.trackHistoryService.update(+id, updateTrackHistoryDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.trackHistoryService.remove(+id);
+    return this.trackHistoryService.create(createTrackHistoryDto, user.id);
   }
 }
