@@ -5,10 +5,10 @@ export class RegisterSignUserDto {
   @Expose()
   @IsNotEmpty({ message: 'Укажите пароль' })
   @IsString({ message: 'Пароль должен быть строкой' })
-  password: string;
+  password!: string;
 
   @Expose()
   @IsString({ message: 'Имя пользователя должен быть строкой' })
   @IsNotEmpty({ message: 'Укажите имя пользователя' })
-  username: string;
+  username!: string;
 }

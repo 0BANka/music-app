@@ -13,6 +13,8 @@ import { Track } from './track/entities/track.entity';
 import { TrackModule } from './track/track.module';
 import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
+import { TrackHistoryModule } from './track-history/track-history.module';
+import { TrackHistory } from './track-history/entities/track-history.entity';
 
 @Module({
   imports: [
@@ -28,12 +30,13 @@ import { User } from './user/entities/user.entity';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [Artist, Album, Track, User],
+      entities: [Artist, Album, Track, User, TrackHistory],
       synchronize: true,
     }),
     AlbumModule,
     TrackModule,
     UserModule,
+    TrackHistoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
