@@ -1,34 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  ForbiddenException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { RegisterSignUserDto } from './dto/register-sign-user.dto';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.userService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  async register(@Body() registerSignUserDto: RegisterSignUserDto) {
+    try {
+      return await this.userService.register(registerSignUserDto);
+    } catch (e: any) {
+      if ((e as { code: string }).code === 'ER_DUP_ENTRY') {
+        throw new ForbiddenException(
+          'Пользователь с таким именем уже существует',
+        );
+      } else {
+        throw new InternalServerErrorException('Что-то пошло не так');
+      }
+    }
   }
 }
