@@ -1,26 +1,32 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
+import * as _ from 'lodash';
+import { User } from './entities/user.entity';
+import { Repository } from 'typeorm';
+import { RegisterSignUserDto } from './dto/register-sign-user.dto';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
-  }
+  private saltRounds = 10;
 
-  findAll() {
-    return `This action returns all user`;
-  }
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
+  ) {}
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
+  async register(registerSignUserDto: RegisterSignUserDto) {
+    const salt = await bcrypt.genSalt(this.saltRounds);
+    registerSignUserDto.password = await bcrypt.hash(
+      registerSignUserDto.password,
+      salt,
+    );
+    await this.usersRepository.save(registerSignUserDto);
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+    const user = await this.usersRepository.findOne({
+      where: { username: registerSignUserDto.username },
+    });
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+    return _.omit(user, ['password', 'token']);
   }
 }
