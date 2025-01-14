@@ -26,4 +26,9 @@ export class UserController {
       }
     }
   }
+
+  @Post('sessions')
+  signIn(@Body() registerSignUserDto: RegisterSignUserDto) {
+    return this.userService.signIn(registerSignUserDto);
+  }
 }
