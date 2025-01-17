@@ -23,8 +23,12 @@ export class AlbumService {
       ? this.albumRepository.find({
           where: { artistId: id },
           relations: { artist: true },
+          order: { year: 'ASC' },
         })
-      : this.albumRepository.find({ relations: { artist: true } });
+      : this.albumRepository.find({
+          relations: { artist: true },
+          order: { year: 'ASC' },
+        });
   }
 
   async findOne(id: string): Promise<Album> {
