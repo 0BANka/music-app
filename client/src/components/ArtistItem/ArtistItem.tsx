@@ -32,7 +32,7 @@ export function ArtistItem({ artist }: Props) {
         <h2 className="artist-title">{name}</h2>
         <div className="artist-actions">
           <div className="artist-info">
-            <Link href={`/artists/${id}/albums`} className="open-btn">
+            <Link href={`/artists/${id}`} className="open-btn">
               Open &gt;&gt;
             </Link>
           </div>
