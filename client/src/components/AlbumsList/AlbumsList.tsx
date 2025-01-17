@@ -21,7 +21,7 @@ export function AlbumsList({ artistId }: Props) {
   }, [dispatch, artistId]);
 
   useEffect(() => {
-    if (albums.length > 0) {
+    if (albums.length > 0 && Array.isArray(albums)) {
       setData(albums);
     } else {
       setData([]);
@@ -36,9 +36,8 @@ export function AlbumsList({ artistId }: Props) {
           {albums.length ? albums[0].artist.name : ''}
         </h2>
         {loading && <Loader />}
-        {data.map((element) => (
-          <AlbumItem key={element.id} album={element} />
-        ))}
+        {data.length > 0 &&
+          data.map((element) => <AlbumItem key={element.id} album={element} />)}
       </div>
     </div>
   );

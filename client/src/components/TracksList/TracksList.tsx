@@ -21,7 +21,7 @@ export function TracksList({ albumId }: Props) {
   }, [dispatch, albumId]);
 
   useEffect(() => {
-    if (tracks.length > 0) {
+    if (tracks.length > 0 && Array.isArray(tracks)) {
       setData(tracks);
     } else {
       setData([]);
@@ -39,9 +39,8 @@ export function TracksList({ albumId }: Props) {
           {tracks.length ? tracks[0].album.name : ''}
         </h3>
         {loading && <Loader />}
-        {data.map((element) => (
-          <TrackItem key={element.id} track={element} />
-        ))}
+        {data.length > 0 &&
+          data.map((element) => <TrackItem key={element.id} track={element} />)}
       </div>
     </div>
   );
