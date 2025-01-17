@@ -16,7 +16,7 @@ export class ArtistController {
   constructor(private readonly artistService: ArtistService) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('image', storage))
+  @UseInterceptors(FileInterceptor('photo', storage))
   async create(
     @Body() createArtistDto: CreateArtistDto,
     @UploadedFile() photo: Express.Multer.File,
