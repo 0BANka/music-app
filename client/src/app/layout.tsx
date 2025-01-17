@@ -1,7 +1,6 @@
 'use client';
 import { Provider } from 'react-redux';
 import store from '@/store';
-import { Toolbar } from '@/components/Toolbar/Toolbar';
 import './global.sass';
 
 export default function RootLayout({
@@ -14,10 +13,7 @@ export default function RootLayout({
       <body>
         <main>
           <Provider store={store}>
-            <div className="Layout-Content">
-              <Toolbar />
-              {children}
-            </div>
+            <div className="Layout-Content">{children}</div>
           </Provider>
         </main>
       </body>

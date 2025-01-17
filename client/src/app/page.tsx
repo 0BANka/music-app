@@ -1,10 +1,11 @@
 'use client';
-import { PostsBuilder } from '@/containers/PostsBuilder/PostsBuilder';
+
+import { ArtistsList } from '@/components/ArtistsList/ArtistsList';
 
 export default function Home() {
   return (
     <>
-      <PostsBuilder />
+      <ArtistsList />
     </>
   );
 }

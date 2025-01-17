@@ -14,7 +14,7 @@ export class ArtistService {
   async create(createArtistDto: CreateArtistDto, photo?: Express.Multer.File) {
     return await this.artistRepository.save({
       ...createArtistDto,
-      photo: photo?.filename || '',
+      photo: photo?.filename || 'no-photo-available.png',
     });
   }
 
