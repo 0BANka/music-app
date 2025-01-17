@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { Track } from './entities/track.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,6 +12,16 @@ export class TrackService {
   ) {}
 
   async create(createAlbumDto: CreateTrackDto) {
+    const uniqueNumber = await this.trackRepository.find({
+      where: {
+        albumId: createAlbumDto.albumId,
+        trackNumber: createAlbumDto.trackNumber,
+      },
+    });
+    if (uniqueNumber.length > 0) {
+      throw new BadRequestException('Duplicate track number');
+    }
+
     return await this.trackRepository.save(createAlbumDto);
   }
 
