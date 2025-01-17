@@ -1,28 +1,31 @@
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { IArtist } from '@/interfaces/IArtist';
-import { fetchArtists } from '@/features/artistsSlice';
-import { ArtistItem } from '../ArtistItem/ArtistItem';
+import { fetchAlbums } from '@/features/albumsSlice';
+import { IAlbum } from '@/interfaces/IAlbum';
 import { Loader } from '../Loader/Loader';
 
 import './AlbumsList.sass';
 
-export function AlbumsList() {
+interface Props {
+  artistId: string;
+}
+
+export function AlbumsList({ artistId }: Props) {
   const dispatch = useAppDispatch();
   const { albums, loading } = useAppSelector((state) => state.albums);
-  const [data, setData] = useState<IArtist[]>([]);
+  const [data, setData] = useState<IAlbum[]>([]);
 
   useEffect(() => {
-    dispatch(fetchArtists());
-  }, [dispatch]);
+    dispatch(fetchAlbums(artistId));
+  }, [dispatch, artistId]);
 
   useEffect(() => {
-    if (artists.length > 0) {
-      setData(artists);
+    if (albums.length > 0) {
+      setData(albums);
     } else {
       setData([]);
     }
-  }, [artists]);
+  }, [albums]);
 
   return (
     <div className="container">
