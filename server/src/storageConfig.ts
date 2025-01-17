@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto';
 import { diskStorage } from 'multer';
 import * as path from 'path';
 
-const rootPath = path.resolve(__dirname, '..', '..');
+const rootPath = path.resolve(__dirname, '..');
 const config = {
   rootPath,
   uploadPath: path.join(rootPath, 'public/uploads'),
