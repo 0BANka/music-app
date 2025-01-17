@@ -16,7 +16,7 @@ const initialState: State = {
     id: '',
     name: '',
     year: '',
-    numberOfTracks: undefined,
+    numberOfTracks: 0,
     image: '',
     artist: {
       id: '',
@@ -44,7 +44,7 @@ const albumsSlice = createSlice({
         id: '',
         name: '',
         year: '',
-        numberOfTracks: undefined,
+        numberOfTracks: 0,
         image: '',
         artist: {
           id: '',
