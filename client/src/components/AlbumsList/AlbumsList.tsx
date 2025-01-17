@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { fetchAlbums } from '@/features/albumsSlice';
 import { IAlbum } from '@/interfaces/IAlbum';
+import { AlbumItem } from '../AlbumItem/AlbumItem';
 import { Loader } from '../Loader/Loader';
 
 import './AlbumsList.sass';
@@ -29,11 +30,14 @@ export function AlbumsList({ artistId }: Props) {
 
   return (
     <div className="container">
-      <div className="artists-list-container">
-        <h1 className="artists-list-title">Artists</h1>
+      <div className="albums-list-container">
+        <h1 className="albums-list-title">Albums</h1>
+        <h2 className="albums-artist-title">
+          {albums.length ? albums[0].artist.name : ''}
+        </h2>
         {loading && <Loader />}
         {data.map((element) => (
-          <ArtistItem key={element.id} artist={element} />
+          <AlbumItem key={element.id} album={element} />
         ))}
       </div>
     </div>
