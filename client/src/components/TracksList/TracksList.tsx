@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { ITrack } from '@/interfaces/ITrack';
 import { fetchTracks } from '@/features/tracksSlice';
+import { TrackItem } from '../TrackItem/TrackItem';
 import { Loader } from '../Loader/Loader';
 
 import './TracksList.sass';
@@ -10,7 +11,7 @@ interface Props {
   albumId: string;
 }
 
-export function AlbumsList({ albumId }: Props) {
+export function TracksList({ albumId }: Props) {
   const dispatch = useAppDispatch();
   const { tracks, loading } = useAppSelector((state) => state.tracks);
   const [data, setData] = useState<ITrack[]>([]);
@@ -38,6 +39,9 @@ export function AlbumsList({ albumId }: Props) {
           {tracks.length ? tracks[0].album.name : ''}
         </h3>
         {loading && <Loader />}
+        {data.map((element) => (
+          <TrackItem key={element.id} track={element} />
+        ))}
       </div>
     </div>
   );
