@@ -194,7 +194,8 @@ Content-Type: application/json
 {
     "name": "Kicks",
     "albumId": "1",
-    "duration": "3:00"
+    "duration": "3:00",
+    "trackNumber": "1"
 }
 ```
 
@@ -208,7 +209,8 @@ Content-Type: application/json
     "id": 1,
     "name": "Kicks",
     "albumId": "1",
-    "duration": "3:00"
+    "duration": "3:00",
+    "trackNumber": 1
 }
 ```
 
@@ -237,13 +239,15 @@ Content-Type: application/json
   "id": 1,
   "name": "Kicks",
   "albumId": "1",
-  "duration": "3:00"
+  "duration": "3:00",
+  "trackNumber": 1
  },
  {
   "id": 2,
   "name": "Hellfire",
   "albumId": "2",
-  "duration": "2:41"
+  "duration": "2:41",
+  "trackNumber": 1
  }
 ]
 ```
@@ -348,8 +352,8 @@ Content-Type: application/json
 
 ## Запуск проекта
 
-1. Перейдите в корневую папку проекта.
-2. Создайте в ней файл `.env`
+1. Перейдите в папку `/server`.
+2. Создайте в ней файл `.env`.
 3. Заполните его переменными окружения, например:
 
 ```bash
@@ -362,5 +366,13 @@ DB_PASSWORD = '111'
 DB_DATABASE = 'MY_DATABASE'
 ```
 
-4. Выполните команду `pnpm i`. Она установит все зависимости. Затем выполните команду `pnpm run dev`. Эта команда запустит сервер.
-5. Можете использовать Postman, чтобы отправлять HTTP-запросы. Подробнее о Postman можно узнать [тут](https://www.postman.com/).
+4. Перейдите в папку `/client`.
+5. Создайте в ней файл `.env`.
+6. Заполните его переменными окружения, например:
+
+```bash
+SERVER_URL = "http://localhost:8000"
+```
+
+7. Перейдите в корневую папку проекта. После этого в консоли выполните команду `npm run dev`. Эта команда запустит серверную и клиентскую части проекта. Клиентская часть проекта стандартно работает по адресу: http://localhost:3000.
+8. Серверная часть проекта стандартно работает по адресу: http://localhost:8000. Можете использовать Postman, чтобы отправлять HTTP-запросы. Подробнее о Postman можно узнать [тут](https://www.postman.com/).
