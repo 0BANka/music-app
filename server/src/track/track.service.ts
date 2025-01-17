@@ -24,6 +24,7 @@ export class TrackService {
             artist: true,
           },
         },
+        order: { trackNumber: 'ASC' },
       });
     } else if (artist) {
       return this.trackRepository.find({
@@ -39,9 +40,13 @@ export class TrackService {
             artist: true,
           },
         },
+        order: { trackNumber: 'ASC' },
       });
     } else {
-      return this.trackRepository.find({ relations: { album: true } });
+      return this.trackRepository.find({
+        relations: { album: true },
+        order: { trackNumber: 'ASC' },
+      });
     }
   }
 }
