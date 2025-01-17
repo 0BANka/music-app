@@ -19,7 +19,11 @@ export class TrackService {
     if (album) {
       return this.trackRepository.find({
         where: { albumId: album },
-        relations: { album: true },
+        relations: {
+          album: {
+            artist: true,
+          },
+        },
       });
     } else if (artist) {
       return this.trackRepository.find({

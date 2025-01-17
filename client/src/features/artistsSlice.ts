@@ -1,10 +1,9 @@
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { axiosApiClient } from '@/helpers/axiosApiClient';
 import { IArtist } from '@/interfaces/IArtist';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 interface State {
   artists: IArtist[];
-  selectedArtist: IArtist;
   error?: Error;
   loading: boolean;
 }
@@ -12,11 +11,6 @@ interface State {
 const initialState: State = {
   loading: false,
   artists: [],
-  selectedArtist: {
-    id: '',
-    name: '',
-    photo: '',
-  },
 };
 
 export const fetchArtists = createAsyncThunk('fetch/artists', async () => {
@@ -27,15 +21,7 @@ export const fetchArtists = createAsyncThunk('fetch/artists', async () => {
 const artistsSlice = createSlice({
   name: 'artists',
   initialState,
-  reducers: {
-    clearSelectedArtist: (state) => {
-      state.selectedArtist = {
-        id: '',
-        name: '',
-        photo: '',
-      };
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchArtists.pending, (state) => {
@@ -49,4 +35,3 @@ const artistsSlice = createSlice({
 });
 
 export const artistsReducer = artistsSlice.reducer;
-export const { clearSelectedArtist } = artistsSlice.actions;
