@@ -17,7 +17,7 @@ export function ArtistsList() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (artists.length > 0) {
+    if (artists.length > 0 && Array.isArray(artists)) {
       setData(artists);
     } else {
       setData([]);
@@ -29,9 +29,10 @@ export function ArtistsList() {
       <div className="artists-list-container">
         <h1 className="artists-list-title">Artists</h1>
         {loading && <Loader />}
-        {data.map((element) => (
-          <ArtistItem key={element.id} artist={element} />
-        ))}
+        {data.length > 0 &&
+          data.map((element) => (
+            <ArtistItem key={element.id} artist={element} />
+          ))}
       </div>
     </div>
   );
