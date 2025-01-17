@@ -1,9 +1,11 @@
+import { albumsReducer } from '@/features/albumsSlice';
 import { artistsReducer } from '@/features/artistsSlice';
 import { configureStore } from '@reduxjs/toolkit';
 
 const store = configureStore({
   reducer: {
     artists: artistsReducer,
+    albums: albumsReducer,
   },
 });
 
