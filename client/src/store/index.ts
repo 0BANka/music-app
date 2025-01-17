@@ -1,11 +1,9 @@
-import { commentsReducer } from '@/features/commentsSlice';
-import { postsReducer } from '@/features/postsSlice';
+import { artistsReducer } from '@/features/artistsSlice';
 import { configureStore } from '@reduxjs/toolkit';
 
 const store = configureStore({
   reducer: {
-    posts: postsReducer,
-    comments: commentsReducer,
+    artists: artistsReducer,
   },
 });
 
