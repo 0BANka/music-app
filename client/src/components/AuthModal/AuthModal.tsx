@@ -39,9 +39,7 @@ export function AuthModal({ type, isOpen }: Props) {
 
   return (
     <>
-      <span className="auth-modal-button" onClick={showModal}>
-        {buttonText}
-      </span>
+      <span onClick={showModal}>{buttonText}</span>
       <Modal
         okType="default"
         title={title}
