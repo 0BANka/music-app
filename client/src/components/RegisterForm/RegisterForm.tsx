@@ -4,6 +4,8 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { registerUser, UserRequest } from '@/features/userSlice';
 
+import './RegisterForm.sass';
+
 interface Props {
   form: FormInstance;
   closeModal: () => void;
@@ -28,7 +30,11 @@ export function RegisterForm({ form, closeModal }: Props) {
 
   return (
     <Form form={form} name="registration-form" onFinish={onFinish}>
-      {registerError ? <Alert type="error" message={registerError} /> : null}
+      {registerError ? (
+        <div className="register-error-container">
+          <Alert type="error" message={registerError} />{' '}
+        </div>
+      ) : null}
       <Form.Item
         name="username"
         rules={[{ required: true, message: 'Please input your username!' }]}
@@ -36,7 +42,7 @@ export function RegisterForm({ form, closeModal }: Props) {
         <Input
           prefix={<UserOutlined />}
           placeholder="Username"
-          className="site-form-item-icon"
+          className="site-form-item-icon username-register-input"
         />
       </Form.Item>
 

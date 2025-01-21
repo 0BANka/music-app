@@ -69,7 +69,12 @@ const initialState: UserState = {
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    clearErrors: (state) => {
+      state.registerError = undefined;
+      state.loginError = undefined;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
@@ -108,3 +113,5 @@ export const userSlice = createSlice({
 });
 
 export const userReducer = userSlice.reducer;
+
+export const { clearErrors } = userSlice.actions;

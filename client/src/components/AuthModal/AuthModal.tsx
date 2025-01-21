@@ -1,9 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { Flex, Modal } from 'antd';
+import { Modal } from 'antd';
 import { useForm } from 'antd/es/form/Form';
+import { useAppDispatch } from '@/store/hooks';
+import { clearErrors } from '@/features/userSlice';
 import { RegisterForm } from '../RegisterForm/RegisterForm';
+
+import './AuthModal.sass';
 
 interface Props {
   type: 'register' | 'login';
@@ -11,6 +15,7 @@ interface Props {
 }
 
 export function AuthModal({ type, isOpen }: Props) {
+  const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState(isOpen || false);
   const [form] = useForm();
 
@@ -24,6 +29,7 @@ export function AuthModal({ type, isOpen }: Props) {
 
   const onCancel = () => {
     form.resetFields();
+    dispatch(clearErrors());
     setIsModalOpen(false);
   };
 
@@ -32,17 +38,21 @@ export function AuthModal({ type, isOpen }: Props) {
 
   return (
     <>
-      <a onClick={showModal}>{buttonText}</a>
+      <span className="auth-modal-button" onClick={showModal}>
+        {buttonText}
+      </span>
       <Modal
+        okType="default"
         title={title}
         open={isModalOpen}
         okText={buttonText}
         onOk={onOk}
         onCancel={onCancel}
+        okButtonProps={{
+          className: 'auth-modal-ok-button',
+        }}
       >
-        <Flex gap="middle" align="start" justify="center">
-          <RegisterForm form={form} closeModal={onCancel} />
-        </Flex>
+        <RegisterForm form={form} closeModal={onCancel} />
       </Modal>
     </>
   );
