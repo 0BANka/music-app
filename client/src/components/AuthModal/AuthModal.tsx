@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Flex, Modal } from 'antd';
 import { useForm } from 'antd/es/form/Form';
+import { RegisterForm } from '../RegisterForm/RegisterForm';
 
 interface Props {
   type: 'register' | 'login';
@@ -39,7 +40,9 @@ export function AuthModal({ type, isOpen }: Props) {
         onOk={onOk}
         onCancel={onCancel}
       >
-        <Flex gap="middle" align="start" justify="center"></Flex>
+        <Flex gap="middle" align="start" justify="center">
+          <RegisterForm form={form} closeModal={onCancel} />
+        </Flex>
       </Modal>
     </>
   );
