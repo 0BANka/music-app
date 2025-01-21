@@ -1,6 +1,7 @@
 'use client';
 import { Provider } from 'react-redux';
 import store from '@/store';
+import { AppToolbar } from '@/components/AppToolBar/AppToolbar';
 import './global.sass';
 
 export default function RootLayout({
@@ -9,14 +10,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
-        <main>
-          <Provider store={store}>
+    <Provider store={store}>
+      <html lang="en">
+        <body>
+          <header>
+            <AppToolbar />
+          </header>
+          <main>
             <div className="Layout-Content">{children}</div>
-          </Provider>
-        </main>
-      </body>
-    </html>
+          </main>
+        </body>
+      </html>
+    </Provider>
   );
 }
