@@ -13,6 +13,7 @@ interface UserState {
 export interface UserRequest {
   username: string;
   password: string;
+  token?: string;
 }
 
 interface UserResponseError {

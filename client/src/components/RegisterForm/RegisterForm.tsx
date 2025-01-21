@@ -4,8 +4,6 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { registerUser, UserRequest } from '@/features/userSlice';
 
-import './RegisterForm.sass';
-
 interface Props {
   form: FormInstance;
   closeModal: () => void;
@@ -31,7 +29,7 @@ export function RegisterForm({ form, closeModal }: Props) {
   return (
     <Form form={form} name="registration-form" onFinish={onFinish}>
       {registerError ? (
-        <div className="register-error-container">
+        <div className="auth-error-container">
           <Alert type="error" message={registerError} />{' '}
         </div>
       ) : null}

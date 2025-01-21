@@ -6,6 +6,7 @@ import { useForm } from 'antd/es/form/Form';
 import { useAppDispatch } from '@/store/hooks';
 import { clearErrors } from '@/features/userSlice';
 import { RegisterForm } from '../RegisterForm/RegisterForm';
+import { LoginForm } from '../LoginForm/LoginForm';
 
 import './AuthModal.sass';
 
@@ -52,7 +53,12 @@ export function AuthModal({ type, isOpen }: Props) {
           className: 'auth-modal-ok-button',
         }}
       >
-        <RegisterForm form={form} closeModal={onCancel} />
+        {' '}
+        {type === 'register' ? (
+          <RegisterForm form={form} closeModal={() => setIsModalOpen(false)} />
+        ) : (
+          <LoginForm form={form} closeModal={() => setIsModalOpen(false)} />
+        )}
       </Modal>
     </>
   );

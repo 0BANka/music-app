@@ -17,13 +17,17 @@ export default function RootLayout({
         theme={{
           components: {
             Input: {
-              activeBorderColor: '#000000',
-              hoverBorderColor: '#000000',
+              activeBorderColor: '#000',
+              hoverBorderColor: '#000',
               activeShadow: 'rgba(0, 0, 0, 0)',
             },
             Button: {
-              defaultHoverBorderColor: '#000000',
-              defaultHoverColor: '#000000',
+              defaultHoverBorderColor: '#000',
+              defaultHoverColor: '#000',
+            },
+            Checkbox: {
+              colorPrimary: '#333',
+              colorPrimaryHover: '#000',
             },
           },
         }}
