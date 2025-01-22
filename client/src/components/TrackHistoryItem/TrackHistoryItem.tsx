@@ -1,11 +1,23 @@
-import { ITrack } from '@/interfaces/ITrack';
+import { ITrackHistory } from '@/interfaces/ITrackHistory';
 
 import './TrackItem.sass';
 
 interface Props {
-  track: ITrack;
+  trackHistoryItem: ITrackHistory;
 }
 
-export function TrackHistoryItem({ track }: Props) {
-  return <div className="track-history"></div>;
+export function TrackHistoryItem({ trackHistoryItem }: Props) {
+  const { track, artist, datetime } = trackHistoryItem;
+
+  return (
+    <div className="track-history">
+      <div className="track-history-info">
+        <div className="track-history-track">
+          <span>{track}</span>
+          <span>by {artist}</span>
+        </div>
+        <div className="track-history-datetime">{datetime}</div>
+      </div>
+    </div>
+  );
 }
