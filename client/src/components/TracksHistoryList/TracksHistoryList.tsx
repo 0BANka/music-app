@@ -30,7 +30,7 @@ export function TracksHistoryList() {
   return (
     <div className="container">
       <div className="tracks-history-list-container">
-        <h1 className="tracks-history-list-title">Tracks History</h1>
+        <h1 className="tracks-history-list-title">History</h1>
         {loading && <Loader />}
         {data.length > 0 &&
           data.map((element) => (

@@ -21,9 +21,14 @@ export function AppToolbar() {
               <AuthModal type="login" />
             </>
           ) : (
-            <span className="profile" title="My profile">
-              Hello, {user.username}!
-            </span>
+            <>
+              <span className="profile" title="My profile">
+                Hello, {user.username}!
+              </span>
+              <Link href="/tracks-history" className="history-link">
+                History
+              </Link>
+            </>
           )}
         </ul>
       </nav>
