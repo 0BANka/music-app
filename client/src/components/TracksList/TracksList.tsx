@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { message } from 'antd';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { ITrack } from '@/interfaces/ITrack';
+import { fetchTracks } from '@/features/tracksSlice';
 import {
   addTrackHistory,
-  fetchTracks,
   HistoryTrackRequest,
-} from '@/features/tracksSlice';
+} from '@/features/tracksHistorySlice';
 import { TrackItem } from '../TrackItem/TrackItem';
 import { Loader } from '../Loader/Loader';
 
