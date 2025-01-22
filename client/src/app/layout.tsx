@@ -29,6 +29,10 @@ export default function RootLayout({
               colorPrimary: '#333',
               colorPrimaryHover: '#000',
             },
+            Message: {
+              contentBg: '#f0f0f0',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+            },
           },
         }}
       >
