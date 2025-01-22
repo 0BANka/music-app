@@ -4,6 +4,7 @@ import {
   Body,
   Headers,
   UnauthorizedException,
+  Get,
 } from '@nestjs/common';
 import { TrackHistoryService } from './track-history.service';
 import { CreateTrackHistoryDto } from './dto/create-track-history.dto';
@@ -13,7 +14,7 @@ export class TrackHistoryController {
   constructor(private readonly trackHistoryService: TrackHistoryService) {}
 
   @Post()
-  async getSecretMessage(
+  async create(
     @Headers() headers: { authorization: string },
     @Body() createTrackHistoryDto: CreateTrackHistoryDto,
   ) {
@@ -28,5 +29,13 @@ export class TrackHistoryController {
     }
 
     return this.trackHistoryService.create(createTrackHistoryDto, user.id);
+  }
+
+  @Get()
+  getHistoryUser(@Headers() headers: { authorization: string }) {
+    if (!headers.authorization) {
+      throw new UnauthorizedException('Вы не авторизованы');
+    }
+    return this.trackHistoryService.getHistoryUser(headers.authorization);
   }
 }

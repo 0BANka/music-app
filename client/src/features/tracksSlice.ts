@@ -60,12 +60,6 @@ const tracksSlice = createSlice({
       .addCase(fetchTracks.fulfilled, (state, action) => {
         state.tracks = action.payload;
         state.loading = false;
-      })
-      .addCase(addTrackHistory.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(addTrackHistory.fulfilled, (state) => {
-        state.loading = false;
       });
   },
 });
