@@ -8,35 +8,10 @@ interface State {
   loading: boolean;
 }
 
-export interface HistoryTrack {
-  user: string;
-  track: string;
-  datetime: string;
-}
-
 const initialState: State = {
   loading: false,
   tracks: [],
 };
-
-export interface HistoryTrackRequest {
-  track: string;
-  token: string;
-}
-
-export const addTrackHistory = createAsyncThunk(
-  'track/addHistory',
-  async (trackRequest: HistoryTrackRequest) => {
-    const { data } = await axiosApiClient.post<HistoryTrack>(
-      `/track_history`,
-      {
-        track: String(trackRequest.track),
-      },
-      { headers: { Authorization: `${trackRequest.token}` } },
-    );
-    return data;
-  },
-);
 
 export const fetchTracks = createAsyncThunk(
   'fetch/tracks',
@@ -59,12 +34,6 @@ const tracksSlice = createSlice({
       })
       .addCase(fetchTracks.fulfilled, (state, action) => {
         state.tracks = action.payload;
-        state.loading = false;
-      })
-      .addCase(addTrackHistory.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(addTrackHistory.fulfilled, (state) => {
         state.loading = false;
       });
   },

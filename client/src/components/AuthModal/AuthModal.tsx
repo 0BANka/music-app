@@ -12,10 +12,11 @@ import './AuthModal.sass';
 
 interface Props {
   type: 'register' | 'login';
+  hideLink?: boolean;
   isOpen?: boolean;
 }
 
-export function AuthModal({ type, isOpen }: Props) {
+export function AuthModal({ type, isOpen, hideLink }: Props) {
   const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState(isOpen || false);
   const [form] = useForm();
@@ -39,7 +40,7 @@ export function AuthModal({ type, isOpen }: Props) {
 
   return (
     <>
-      <span onClick={showModal}>{buttonText}</span>
+      {hideLink ? null : <span onClick={showModal}>{buttonText}</span>}
       <Modal
         okType="default"
         title={title}

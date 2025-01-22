@@ -14,6 +14,10 @@ export const withAuth = (WrappedComponent: ElementType) => {
       }
     });
 
+    if (!user) {
+      return null;
+    }
+
     return <WrappedComponent {...props} />;
   };
 };
