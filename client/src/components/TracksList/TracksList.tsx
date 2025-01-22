@@ -28,6 +28,8 @@ export function TracksList({ albumId }: Props) {
     }
   }, [tracks]);
 
+  const onClickTrack = (id: string) => {};
+
   return (
     <div className="container">
       <div className="tracks-list-container">
@@ -40,7 +42,13 @@ export function TracksList({ albumId }: Props) {
         </h3>
         {loading && <Loader />}
         {data.length > 0 &&
-          data.map((element) => <TrackItem key={element.id} track={element} />)}
+          data.map((element) => (
+            <TrackItem
+              key={element.id}
+              track={element}
+              onClickTrack={() => onClickTrack(element.id)}
+            />
+          ))}
       </div>
     </div>
   );

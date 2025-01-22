@@ -4,14 +4,15 @@ import './TrackItem.sass';
 
 interface Props {
   track: ITrack;
+  onClickTrack: (id: string) => void;
 }
 
-export function TrackItem({ track }: Props) {
-  const { trackNumber, name, duration } = track;
+export function TrackItem({ track, onClickTrack }: Props) {
+  const { trackNumber, name, duration, id } = track;
 
   return (
     <div className="track">
-      <div className="track-info">
+      <div className="track-info" onClick={() => onClickTrack(id)}>
         <div className="track-name-container">
           <span className="track-number">{trackNumber}</span>
           <span className="track-name">{name}</span>
