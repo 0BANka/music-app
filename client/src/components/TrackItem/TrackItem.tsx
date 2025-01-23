@@ -47,22 +47,19 @@ export function TrackItem({ track, onClickTrack }: Props) {
         </div>
         <div className="track-actions">
           <span className="track-duration">{duration}</span>
-          {youtubeLink && (
-            <>
-              <Dropdown
-                className="track-dropdown"
-                placement="bottomLeft"
-                menu={menuProps}
-                trigger={['hover']}
-              >
-                <EllipsisOutlined
-                  className="track-ellipsis"
-                  onClick={(e) => e.stopPropagation()}
-                />
-              </Dropdown>
-              <YouTubeModal youtubeLink={youtubeLink} />
-            </>
-          )}
+          <Dropdown
+            className="track-dropdown"
+            placement="bottomLeft"
+            menu={menuProps}
+            trigger={['hover']}
+            disabled={!youtubeLink}
+          >
+            <EllipsisOutlined
+              className="track-ellipsis"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </Dropdown>
+          {youtubeLink && <YouTubeModal youtubeLink={youtubeLink} />}
         </div>
       </div>
     </div>
