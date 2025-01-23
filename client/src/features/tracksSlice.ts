@@ -4,12 +4,14 @@ import { ITrack } from '@/interfaces/ITrack';
 
 interface State {
   tracks: ITrack[];
+  youtubeModal: boolean;
   error?: Error;
   loading: boolean;
 }
 
 const initialState: State = {
   loading: false,
+  youtubeModal: false,
   tracks: [],
 };
 
@@ -26,7 +28,11 @@ export const fetchTracks = createAsyncThunk(
 const tracksSlice = createSlice({
   name: 'tracks',
   initialState,
-  reducers: {},
+  reducers: {
+    setYoutubeModal: (state, action) => {
+      state.youtubeModal = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchTracks.pending, (state) => {
@@ -40,3 +46,4 @@ const tracksSlice = createSlice({
 });
 
 export const tracksReducer = tracksSlice.reducer;
+export const { setYoutubeModal } = tracksSlice.actions;

@@ -27,4 +27,7 @@ export class Track {
 
   @Column()
   duration: string;
+
+  @Column({ nullable: true })
+  youtubeLink?: string;
 }

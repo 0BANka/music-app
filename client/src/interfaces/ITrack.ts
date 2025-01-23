@@ -11,4 +11,5 @@ export interface ITrack {
       name: string;
     };
   };
+  youtubeLink?: string;
 }
