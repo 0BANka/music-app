@@ -8,7 +8,7 @@ interface Props {
 }
 
 export function TrackItem({ track, onClickTrack }: Props) {
-  const { trackNumber, name, duration, id } = track;
+  const { trackNumber, name, duration, id, youtubeLink } = track;
 
   return (
     <div className="track" onClick={() => onClickTrack(id)}>
@@ -17,6 +17,9 @@ export function TrackItem({ track, onClickTrack }: Props) {
           <span className="track-number">{trackNumber}</span>
           <span className="track-name">{name}</span>
         </div>
+        {youtubeLink && (
+          
+        )}
         <span className="track-duration">{duration}</span>
       </div>
     </div>

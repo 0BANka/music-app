@@ -11,18 +11,48 @@ export class TrackService {
     private trackRepository: Repository<Track>,
   ) {}
 
-  async create(createAlbumDto: CreateTrackDto) {
+  async create(createTrackDto: CreateTrackDto) {
     const uniqueNumber = await this.trackRepository.find({
       where: {
-        albumId: createAlbumDto.albumId,
-        trackNumber: createAlbumDto.trackNumber,
+        albumId: createTrackDto.albumId,
+        trackNumber: createTrackDto.trackNumber,
       },
     });
     if (uniqueNumber.length > 0) {
       throw new BadRequestException('Duplicate track number');
     }
 
-    return await this.trackRepository.save(createAlbumDto);
+    if (createTrackDto.youtubeLink) {
+      const formateYouTubeLink = this.extractYouTubeCode(
+        createTrackDto.youtubeLink,
+      );
+
+      if (formateYouTubeLink) {
+        createTrackDto.youtubeLink = formateYouTubeLink;
+      }
+    }
+
+    return await this.trackRepository.save({
+      ...createTrackDto,
+      youtubeLink: createTrackDto.youtubeLink || '',
+    });
+  }
+
+  extractYouTubeCode(url: string) {
+    const firstUrlReg = /youtu\.be\/([\w-]+)/;
+    const secondUrlReg = /youtube\.com\/.*[?&]v=([\w-]+)/;
+
+    const firstCode = url.match(firstUrlReg);
+    if (firstCode) {
+      return firstCode[1];
+    }
+
+    const secondCode = url.match(secondUrlReg);
+    if (secondCode) {
+      return secondCode[1];
+    }
+
+    return null;
   }
 
   async findAll(album?: string, artist?: string): Promise<Track[]> {

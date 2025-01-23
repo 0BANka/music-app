@@ -24,5 +24,6 @@ export class CreateTrackDto {
 
   @Expose()
   @Optional()
+  @IsString({ message: 'Ссылка на youtube должна быть строкой' })
   youtubeLink?: string;
 }
