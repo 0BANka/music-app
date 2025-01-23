@@ -1,3 +1,4 @@
+import { Optional } from '@nestjs/common';
 import { Expose } from 'class-transformer';
 import { IsNotEmpty, IsNumberString, IsString } from 'class-validator';
 
@@ -20,4 +21,8 @@ export class CreateTrackDto {
   @Expose()
   @IsNotEmpty({ message: 'Укажите длительность трека' })
   duration!: string;
+
+  @Expose()
+  @Optional()
+  youtubeLink?: string;
 }

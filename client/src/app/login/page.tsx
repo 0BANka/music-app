@@ -11,16 +11,12 @@ export default function LoginPage() {
   const { user } = useAppSelector((state) => state.user);
 
   useEffect(() => {
-    const displayWarning = () => {
+    if (user?.token === undefined) {
       messageApi.open({
         type: 'warning',
         content: 'Please login!',
       });
-    };
-
-    if (!user?.token) {
-      displayWarning();
-    } else {
+    } else if (user?.token) {
       redirect('/');
     }
   }, [messageApi, user?.token]);
