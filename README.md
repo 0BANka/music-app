@@ -195,7 +195,8 @@ Content-Type: application/json
     "name": "Kicks",
     "albumId": "1",
     "duration": "3:00",
-    "trackNumber": "1"
+    "trackNumber": "1",
+    "youtubeLink": "https://www.youtube.com/watch?v=kW2KaAgNcN4"
 }
 ```
 
@@ -210,7 +211,8 @@ Content-Type: application/json
     "name": "Kicks",
     "albumId": "1",
     "duration": "3:00",
-    "trackNumber": 1
+    "trackNumber": 1,
+    "youtubeLink": "kW2KaAgNcN4"
 }
 ```
 
