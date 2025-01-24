@@ -26,4 +26,8 @@ export class CreateTrackDto {
   @Optional()
   @IsString({ message: 'Ссылка на youtube должна быть строкой' })
   youtubeLink?: string;
+
+  @Expose()
+  @Optional()
+  track?: Express.Multer.File;
 }

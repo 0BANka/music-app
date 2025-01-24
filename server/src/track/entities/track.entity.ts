@@ -30,4 +30,7 @@ export class Track {
 
   @Column({ nullable: true })
   youtubeLink?: string;
+
+  @Column({ nullable: true })
+  track?: string;
 }
