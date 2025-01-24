@@ -183,7 +183,7 @@ Content-Type: application/json
 
 #### Описание:
 
-При отправке POST-запроса на этот путь сервер сохраняет информацию о треке в базе данных.
+При отправке POST-запроса на этот путь сервер сохраняет информацию о треке в базе данных. Также позволяет отправить аудио в поле `track` и подтянуть из метаданных файла длительность трека.
 
 #### Пример запроса:
 
@@ -196,7 +196,8 @@ Content-Type: application/json
     "albumId": "1",
     "duration": "3:00",
     "trackNumber": "1",
-    "youtubeLink": "https://www.youtube.com/watch?v=kW2KaAgNcN4"
+    "youtubeLink": "https://www.youtube.com/watch?v=kW2KaAgNcN4",
+    "track": ""
 }
 ```
 
@@ -212,7 +213,8 @@ Content-Type: application/json
     "albumId": "1",
     "duration": "3:00",
     "trackNumber": 1,
-    "youtubeLink": "kW2KaAgNcN4"
+    "youtubeLink": "kW2KaAgNcN4",
+    "track": ""
 }
 ```
 
@@ -243,13 +245,17 @@ Content-Type: application/json
   "albumId": "1",
   "duration": "3:00",
   "trackNumber": 1
+  "track": "",
+  "youtubeLink": ""
  },
  {
   "id": 2,
   "name": "Hellfire",
   "albumId": "2",
   "duration": "2:41",
-  "trackNumber": 1
+  "trackNumber": 1,
+  "track": "",
+  "youtubeLink": ""
  }
 ]
 ```
