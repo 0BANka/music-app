@@ -3,9 +3,11 @@ import { diskStorage } from 'multer';
 import * as path from 'path';
 
 const rootPath = path.resolve(__dirname, '..');
+export const pathToFiles = path.join(rootPath, 'public/uploads');
+
 const config = {
   rootPath,
-  uploadPath: path.join(rootPath, 'public/uploads'),
+  uploadPath: pathToFiles,
 };
 
 export const storage = {
