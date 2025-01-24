@@ -84,7 +84,7 @@ export function TracksList({ albumId }: Props) {
             data.map((element) => (
               <TrackItem
                 key={element.id}
-                track={element}
+                trackItem={element}
                 onClickTrack={() => onClickTrack(element.id)}
               />
             ))}

@@ -6,17 +6,25 @@ import {
   HttpException,
   HttpStatus,
   Query,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
+import { storage } from 'src/storageConfig';
 import { TrackService } from './track.service';
 import { CreateTrackDto } from './dto/create-track.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('tracks')
 export class TrackController {
   constructor(private readonly trackService: TrackService) {}
 
   @Post()
-  async create(@Body() createTrackDto: CreateTrackDto) {
-    return this.trackService.create(createTrackDto);
+  @UseInterceptors(FileInterceptor('track', storage))
+  async create(
+    @Body() createTrackDto: CreateTrackDto,
+    @UploadedFile() track: Express.Multer.File,
+  ) {
+    return this.trackService.create(createTrackDto, track);
   }
 
   @Get()

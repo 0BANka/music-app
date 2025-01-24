@@ -1,8 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import * as path from 'path';
+import { Repository } from 'typeorm';
+import { parseFile } from 'music-metadata';
+import { pathToFiles } from 'src/storageConfig';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { Track } from './entities/track.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class TrackService {
@@ -11,7 +14,15 @@ export class TrackService {
     private trackRepository: Repository<Track>,
   ) {}
 
-  async create(createTrackDto: CreateTrackDto) {
+  durationFormate(duration: number) {
+    const seconds = Math.floor(duration || 0);
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  }
+
+  async create(createTrackDto: CreateTrackDto, track?: Express.Multer.File) {
     const uniqueNumber = await this.trackRepository.find({
       where: {
         albumId: createTrackDto.albumId,
@@ -32,9 +43,26 @@ export class TrackService {
       }
     }
 
+    if (track?.filename && !createTrackDto.duration) {
+      try {
+        const pathAudio = path.join(pathToFiles, track.filename);
+        const metadata = await parseFile(pathAudio);
+
+        if (metadata.format.duration) {
+          const duration = this.durationFormate(metadata.format.duration);
+          createTrackDto.duration = duration;
+        } else {
+          throw new BadRequestException('Invalid duration');
+        }
+      } catch (e) {
+        throw new BadRequestException('Invalid file');
+      }
+    }
+
     return await this.trackRepository.save({
       ...createTrackDto,
       youtubeLink: createTrackDto.youtubeLink || '',
+      track: track?.filename || '',
     });
   }
 

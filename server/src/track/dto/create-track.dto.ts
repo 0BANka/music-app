@@ -19,11 +19,14 @@ export class CreateTrackDto {
   albumId!: string;
 
   @Expose()
-  @IsNotEmpty({ message: 'Укажите длительность трека' })
-  duration!: string;
+  @Optional()
+  duration?: string;
 
   @Expose()
   @Optional()
-  @IsString({ message: 'Ссылка на youtube должна быть строкой' })
   youtubeLink?: string;
+
+  @Expose()
+  @Optional()
+  track?: Express.Multer.File;
 }

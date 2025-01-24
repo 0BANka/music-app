@@ -12,4 +12,5 @@ export interface ITrack {
     };
   };
   youtubeLink?: string;
+  track?: string;
 }
