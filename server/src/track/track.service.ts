@@ -11,7 +11,7 @@ export class TrackService {
     private trackRepository: Repository<Track>,
   ) {}
 
-  async create(createTrackDto: CreateTrackDto) {
+  async create(createTrackDto: CreateTrackDto, track?: Express.Multer.File) {
     const uniqueNumber = await this.trackRepository.find({
       where: {
         albumId: createTrackDto.albumId,
@@ -35,6 +35,7 @@ export class TrackService {
     return await this.trackRepository.save({
       ...createTrackDto,
       youtubeLink: createTrackDto.youtubeLink || '',
+      track: track?.filename || '',
     });
   }
 
