@@ -36,8 +36,13 @@ export function AlbumsList({ artistId }: Props) {
           {albums.length ? albums[0].artist.name : ''}
         </h2>
         {loading && <Loader />}
-        {data.length > 0 &&
-          data.map((element) => <AlbumItem key={element.id} album={element} />)}
+        {data.length > 0 ? (
+          data.map((element) => <AlbumItem key={element.id} album={element} />)
+        ) : (
+          <>
+            <h3>No albums found.</h3>
+          </>
+        )}
       </div>
     </div>
   );
