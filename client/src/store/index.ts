@@ -1,21 +1,41 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { albumsReducer } from '@/features/albumsSlice';
-import { artistsReducer } from '@/features/artistsSlice';
-import { tracksReducer } from '@/features/tracksSlice';
-import { userReducer } from '../features/userSlice';
-import { tracksHistoryReducer } from '@/features/tracksHistorySlice';
+import storage from 'redux-persist/lib/storage';
+import persistReducer from 'redux-persist/es/persistReducer';
+import {
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  persistStore,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
+} from 'redux-persist';
+import { rootReducer } from './rootReducer';
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['user'],
+};
+
+const persistedReducer = persistReducer<ReturnType<typeof rootReducer>>(
+  persistConfig,
+  rootReducer,
+);
 
 const store = configureStore({
-  reducer: {
-    artists: artistsReducer,
-    albums: albumsReducer,
-    tracks: tracksReducer,
-    user: userReducer,
-    tracksHistory: tracksHistoryReducer,
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) => {
+    return getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    });
   },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+export const persistor = persistStore(store);
 
 export default store;
