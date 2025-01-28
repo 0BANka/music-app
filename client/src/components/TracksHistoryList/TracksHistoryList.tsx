@@ -32,13 +32,18 @@ export function TracksHistoryList() {
       <div className="tracks-history-list-container">
         <h1 className="tracks-history-list-title">History</h1>
         {loading && <Loader />}
-        {data.length > 0 &&
+        {data.length > 0 ? (
           data.map((element) => (
             <TrackHistoryItem
               key={element.datetime}
               trackHistoryItem={element}
             />
-          ))}
+          ))
+        ) : (
+          <>
+            <h3>No history found.</h3>
+          </>
+        )}
       </div>
     </div>
   );

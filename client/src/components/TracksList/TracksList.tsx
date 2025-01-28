@@ -80,14 +80,19 @@ export function TracksList({ albumId }: Props) {
             {tracks.length ? tracks[0].album.name : ''}
           </h3>
           {loading && <Loader />}
-          {data.length > 0 &&
+          {data.length > 0 ? (
             data.map((element) => (
               <TrackItem
                 key={element.id}
                 trackItem={element}
                 onClickTrack={() => onClickTrack(element.id)}
               />
-            ))}
+            ))
+          ) : (
+            <>
+              <h3>No tracks found.</h3>
+            </>
+          )}
         </div>
       </div>
     </>

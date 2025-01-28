@@ -29,10 +29,15 @@ export function ArtistsList() {
       <div className="artists-list-container">
         <h1 className="artists-list-title">Artists</h1>
         {loading && <Loader />}
-        {data.length > 0 &&
+        {data.length > 0 ? (
           data.map((element) => (
             <ArtistItem key={element.id} artist={element} />
-          ))}
+          ))
+        ) : (
+          <>
+            <h3>No artists found.</h3>
+          </>
+        )}
       </div>
     </div>
   );
