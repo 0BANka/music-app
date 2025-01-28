@@ -22,8 +22,30 @@ interface UserResponseError {
   statusCode: number;
 }
 
+export const logoutUser = createAsyncThunk(
+  'user/logout',
+  async (_, { rejectWithValue, getState }) => {
+    try {
+      const token = (getState() as { user: UserState })?.user?.user?.token;
+      const { data } = await axiosApiClient.delete('users/logout', {
+        headers: { Authorization: token },
+      });
+      return data;
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        if (err.response?.data) {
+          const errorResponse: UserResponseError = err.response.data;
+          return rejectWithValue(errorResponse.message);
+        }
+        return rejectWithValue('An error occurred: ');
+      }
+      throw err;
+    }
+  },
+);
+
 export const registerUser = createAsyncThunk<IUser, UserRequest>(
-  'auth/register',
+  'user/register',
   async (userData, { rejectWithValue }) => {
     try {
       const { data } = await axiosApiClient.post<IUser>('/users', userData);
@@ -109,6 +131,9 @@ export const userSlice = createSlice({
           state.loginError = 'Something went wrong';
         }
         state.loading = false;
+      })
+      .addCase(logoutUser.fulfilled, () => {
+        return initialState;
       });
   },
 });

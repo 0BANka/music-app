@@ -26,8 +26,10 @@ export class UserService {
     const user = await this.usersRepository.findOne({
       where: { username: registerSignUserDto.username },
     });
+    user.generateToken();
 
-    return _.omit(user, ['password', 'token']);
+    const userWithToken = await this.usersRepository.save(user);
+    return _.omit(userWithToken, 'password');
   }
 
   async signIn(registerSignUserDto: RegisterSignUserDto) {
@@ -50,5 +52,11 @@ export class UserService {
     const userWithToken = await this.usersRepository.save(user);
 
     return _.omit(userWithToken, 'password');
+  }
+
+  getUserByToken(token: string) {
+    return this.usersRepository.findOne({
+      where: { token },
+    });
   }
 }

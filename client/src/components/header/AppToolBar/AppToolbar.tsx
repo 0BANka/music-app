@@ -1,12 +1,18 @@
 import { Header } from 'antd/es/layout/layout';
-import { useAppSelector } from '@/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { AuthModal } from '@/components/AuthModal/AuthModal';
 import Link from 'next/link';
 
 import './AppToolBar.sass';
+import { logoutUser } from '@/features/userSlice';
 
 export function AppToolbar() {
+  const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
+
+  const logoutHandler = () => {
+    dispatch(logoutUser());
+  };
 
   return (
     <Header className="app-toolbar-header">
@@ -28,6 +34,9 @@ export function AppToolbar() {
               <Link href="/tracks-history" className="history-link">
                 History
               </Link>
+              <span className="logout" title="Logout" onClick={logoutHandler}>
+                Logout
+              </span>
             </>
           )}
         </ul>
