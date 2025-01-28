@@ -288,7 +288,8 @@ Content-Type: application/json
 
 {
     "id": 1,
-    "username": "vasya_pupkin"
+    "username": "vasya_pupkin",
+    "token": "some_token"
 }
 ```
 
@@ -324,7 +325,29 @@ Content-Type: application/json
 }
 ```
 
-### 10. **POST** `/track_history`
+### 10. **DELETE** `/users/logout`
+
+Этот эндпоинт позволяет выходить из аккаунта.
+
+#### Описание:
+
+При отправке DELETE-запроса на этот путь сервер удаляет токен авторизации пользователя из базы данных. Необходимо в заголовке указать токен авторизации пользователя.
+
+#### Пример запроса:
+
+```http
+DELETE /users/logout HTTP/1.1
+Authorization: some_token
+```
+
+#### Пример ответа:
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+```
+
+### 11. **POST** `/track_history`
 
 Этот эндпоинт позволяет сохранять историю прослушивания треков.
 
@@ -336,7 +359,6 @@ Content-Type: application/json
 
 ```http
 POST /track_history HTTP/1.1
-
 Authorization: some_token
 
 {
@@ -358,6 +380,40 @@ Content-Type: application/json
 }
 ```
 
+### 12. **GET** `/track_history`
+
+Эндпоинт для получения истории прослушивания треков.
+
+#### Описание:
+
+При отправке GET-запроса на этот путь сервер возвращает массив объектов истории прослушивания треков. Необходимо в заголовке указать токен авторизации пользователя.
+
+#### Пример запроса:
+
+```http
+GET /track_history HTTP/1.1
+Authorization: some_token
+```
+
+#### Пример ответа:
+
+````http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+[
+    {
+      "track": "Track name",
+      "artist": "Artist name",
+      "datetime": "2023-06-01T12:34:56Z"
+    },
+    {
+      "track": "Track name 2",
+      "artist": "Artist name 2",
+      "datetime": "2024-01-01T13:54:16Z"
+    }
+]
+
 ## Запуск проекта
 
 1. Перейдите в папку `/server`.
@@ -372,7 +428,7 @@ DB_PORT = 3306
 DB_USER = 'root'
 DB_PASSWORD = '111'
 DB_DATABASE = 'MY_DATABASE'
-```
+````
 
 4. Перейдите в папку `/client`.
 5. Создайте в ней файл `.env`.
@@ -384,3 +440,10 @@ SERVER_URL = "http://localhost:8000"
 
 7. Перейдите в корневую папку проекта. После этого в консоли выполните команду `npm run dev`. Эта команда запустит серверную и клиентскую части проекта. Клиентская часть проекта стандартно работает по адресу: http://localhost:3000.
 8. Серверная часть проекта стандартно работает по адресу: http://localhost:8000. Можете использовать Postman, чтобы отправлять HTTP-запросы. Подробнее о Postman можно узнать [тут](https://www.postman.com/).
+
+### Запуск фикстур
+
+1. Откроите терминал и перейдите в папку `/server`.
+2. Выполните команду `npm run seed`. Эта команда запустит фикстуры.
+
+## Спасибо за внимание!
