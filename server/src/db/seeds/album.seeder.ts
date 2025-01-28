@@ -1,6 +1,6 @@
-import { Album } from '../../album/entities/album.entity';
 import { DataSource } from 'typeorm';
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
+import { Album } from '../../album/entities/album.entity';
 
 export default class AlbumSeeder implements Seeder {
   public async run(

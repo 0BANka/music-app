@@ -1,6 +1,6 @@
-import { Track } from '../../track/entities/track.entity';
 import { DataSource } from 'typeorm';
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
+import { Track } from '../../track/entities/track.entity';
 
 export default class TrackSeeder implements Seeder {
   public async run(

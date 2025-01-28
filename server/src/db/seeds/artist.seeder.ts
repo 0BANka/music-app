@@ -1,6 +1,6 @@
-import { Artist } from '../../artist/entities/artist.entity';
 import { DataSource } from 'typeorm';
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
+import { Artist } from '../../artist/entities/artist.entity';
 
 export default class ArtistSeeder implements Seeder {
   public async run(
