@@ -8,6 +8,8 @@ import './AppToolBar.sass';
 export function AppToolbar() {
   const { user } = useAppSelector((state) => state.user);
 
+  const logoutHandler = () => {};
+
   return (
     <Header className="app-toolbar-header">
       <nav className="nav-container">
@@ -28,6 +30,9 @@ export function AppToolbar() {
               <Link href="/tracks-history" className="history-link">
                 History
               </Link>
+              <span className="logout" title="Logout" onClick={logoutHandler}>
+                Logout
+              </span>
             </>
           )}
         </ul>
