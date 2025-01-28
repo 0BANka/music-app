@@ -15,7 +15,7 @@ import { rootReducer } from './rootReducer';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['user', 'albums', 'artists', 'tracks', 'tracksHistory'],
+  whitelist: ['user'],
 };
 
 const persistedReducer = persistReducer<ReturnType<typeof rootReducer>>(
