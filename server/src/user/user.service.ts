@@ -51,4 +51,10 @@ export class UserService {
 
     return _.omit(userWithToken, 'password');
   }
+
+  getUserByToken(token: string) {
+    return this.usersRepository.findOne({
+      where: { token },
+    });
+  }
 }
