@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import * as _ from 'lodash';
@@ -58,5 +62,17 @@ export class UserService {
     return this.usersRepository.findOne({
       where: { token },
     });
+  }
+
+  async logoutUser(token: string) {
+    const user = await this.getUserByToken(token);
+    if (!user) {
+      throw new ForbiddenException();
+    }
+
+    user.generateToken();
+    await this.usersRepository.save(user);
+
+    return;
   }
 }

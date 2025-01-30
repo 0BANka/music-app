@@ -5,7 +5,7 @@ import { User } from '../../user/entities/user.entity';
 
 export const userFactory = setSeederFactory(User, async () => {
   const user = new User();
-  user.username = faker.internet.email();
+  user.username = faker.internet.username();
   user.password = await bcrypt.hash('111', 10);
 
   return user;

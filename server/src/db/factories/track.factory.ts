@@ -7,10 +7,14 @@ export const trackFactory = setSeederFactory(Track, async () => {
   track.name = faker.music.songName();
   track.trackNumber = String(faker.number.int({ min: 1, max: 2 }));
   track.albumId = String(faker.number.int({ min: 1, max: 2 }));
-  track.duration =
-    String(faker.number.int({ min: 2, max: 4 })) +
-    ':' +
-    String(faker.number.int({ min: 0, max: 59 }));
+
+  let trackMinutes = String(faker.number.int({ min: 2, max: 4 }));
+  let trackSeconds = String(faker.number.int({ min: 0, max: 59 }));
+
+  trackMinutes.length === 1 && (trackMinutes = '0' + trackMinutes);
+  trackSeconds.length === 1 && (trackSeconds = '0' + trackSeconds);
+
+  track.duration = trackMinutes + ':' + trackSeconds;
   track.youtubeLink = '';
   track.track = '';
 

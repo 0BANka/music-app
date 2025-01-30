@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "pnpm i & ultra -r pnpm i & ultra -r dev",
-    "build": "pnpm i & ultra -r pnpm i & ultra -r build"
+    "build": "pnpm i & ultra -r pnpm i & ultra -r build",
+    "seed": "pnpm i & ultra -r pnpm i & ultra -r seed"
   },
   "author": "",
   "license": "ISC",
