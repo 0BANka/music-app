@@ -21,8 +21,8 @@ export function ArtistItem({ artist }: Props) {
     <div className="artist">
       <div className="artist-image-container">
         <Image
-          loader={() => artistPhoto}
-          src={artistPhoto}
+          loader={() => (photo?.match(/^https/) ? photo : artistPhoto)}
+          src={photo?.match(/^https/) ? photo : artistPhoto}
           alt={name}
           width={200}
           height={200}

@@ -21,8 +21,8 @@ export function AlbumItem({ album }: Props) {
     <div className="album">
       <div className="album-image-container">
         <Image
-          loader={() => albumImage}
-          src={albumImage}
+          loader={() => (image?.match(/^https/) ? image : albumImage)}
+          src={image?.match(/^https/) ? image : albumImage}
           alt={name}
           width={200}
           height={200}

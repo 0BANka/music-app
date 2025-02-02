@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { nanoid } from 'nanoid';
+import { Role } from 'src/role/enums/role.enum';
 
 @Entity()
 export class User {
@@ -14,6 +15,9 @@ export class User {
 
   @Column({ nullable: true })
   token?: string;
+
+  @Column({ default: Role.USER })
+  role: Role;
 
   generateToken() {
     this.token = nanoid();

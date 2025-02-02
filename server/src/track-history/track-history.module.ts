@@ -5,10 +5,11 @@ import { TrackHistoryController } from './track-history.controller';
 import { TrackHistory } from './entities/track-history.entity';
 import { User } from 'src/user/entities/user.entity';
 import { Track } from 'src/track/entities/track.entity';
+import { UserService } from 'src/user/user.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([TrackHistory, User, Track])],
   controllers: [TrackHistoryController],
-  providers: [TrackHistoryService],
+  providers: [TrackHistoryService, UserService],
 })
 export class TrackHistoryModule {}

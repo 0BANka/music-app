@@ -8,7 +8,7 @@ export const albumFactory = setSeederFactory(Album, async () => {
   album.artistId = String(
     faker.number.int({
       min: 1,
-      max: 2,
+      max: 3,
     }),
   );
   album.year = faker.date
@@ -18,7 +18,7 @@ export const albumFactory = setSeederFactory(Album, async () => {
     })
     .getFullYear()
     .toString();
-  album.image = 'no-photo-available.png';
+  album.image = faker.image.urlPicsumPhotos();
 
   return album;
 });
