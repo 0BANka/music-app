@@ -6,9 +6,11 @@ import {
   InternalServerErrorException,
   Delete,
   Headers,
+  UseGuards,
 } from '@nestjs/common';
-import { UserService } from './user.service';
 import { RegisterSignUserDto } from './dto/register-sign-user.dto';
+import { UserService } from './user.service';
+import { AuthGuard } from './auth.guard';
 
 @Controller('users')
 export class UserController {
@@ -35,6 +37,7 @@ export class UserController {
   }
 
   @Delete('logout')
+  @UseGuards(AuthGuard)
   async logout(@Headers() headers: { authorization: string }) {
     if (!headers.authorization) {
       return;

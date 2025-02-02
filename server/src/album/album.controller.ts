@@ -9,17 +9,20 @@ import {
   Param,
   HttpStatus,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { storage } from '../storageConfig';
+import { AuthGuard } from 'src/user/auth.guard';
 
 @Controller('albums')
 export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}
 
   @Post()
+  @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('image', storage))
   async create(
     @Body() createAlbumDto: CreateAlbumDto,

@@ -8,17 +8,20 @@ import {
   Query,
   UseInterceptors,
   UploadedFile,
+  UseGuards,
 } from '@nestjs/common';
 import { storage } from 'src/storageConfig';
 import { TrackService } from './track.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AuthGuard } from 'src/user/auth.guard';
 
 @Controller('tracks')
 export class TrackController {
   constructor(private readonly trackService: TrackService) {}
 
   @Post()
+  @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('track', storage))
   async create(
     @Body() createTrackDto: CreateTrackDto,
