@@ -12,6 +12,6 @@ export default class ArtistSeeder implements Seeder {
     await dataSource.query('SET foreign_key_checks = 1;');
 
     const artistFactory = factoryManager.get(Artist);
-    await artistFactory.saveMany(2);
+    await artistFactory.saveMany(3);
   }
 }

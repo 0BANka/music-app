@@ -12,6 +12,6 @@ export default class TrackSeeder implements Seeder {
     await dataSource.query('SET foreign_key_checks = 1;');
 
     const trackFactory = factoryManager.get(Track);
-    await trackFactory.saveMany(2);
+    await trackFactory.saveMany(50);
   }
 }

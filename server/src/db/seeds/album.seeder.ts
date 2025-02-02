@@ -12,6 +12,6 @@ export default class AlbumSeeder implements Seeder {
     await dataSource.query('SET foreign_key_checks = 1;');
 
     const albumFactory = factoryManager.get(Album);
-    await albumFactory.saveMany(2);
+    await albumFactory.saveMany(5);
   }
 }
