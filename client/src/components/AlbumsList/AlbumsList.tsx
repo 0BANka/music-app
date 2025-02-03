@@ -13,15 +13,16 @@ interface Props {
 
 export function AlbumsList({ artistId }: Props) {
   const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.user);
   const { albums, albumsLoading } = useAppSelector((state) => state.albums);
   const [data, setData] = useState<IAlbum[]>([]);
 
   useEffect(() => {
     dispatch(fetchAlbums(artistId));
-  }, [dispatch, artistId]);
+  }, [dispatch, artistId, user?.token]);
 
   useEffect(() => {
-    if (albums.length > 0 && Array.isArray(albums)) {
+    if (albums.length > 0 && Array.isArray(albums) && albums[0].name) {
       setData(albums);
     } else {
       setData([]);

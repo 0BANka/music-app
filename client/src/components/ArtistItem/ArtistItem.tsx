@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { Badge } from 'antd';
 import { IArtist } from '@/interfaces/IArtist';
 
 import './ArtistItem.sass';
-import { Badge } from 'antd';
 
 interface Props {
   artist: IArtist;

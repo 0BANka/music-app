@@ -7,6 +7,7 @@ export interface IAlbum {
   artist: {
     id: string;
     name: string;
+    isPublish: boolean;
   };
   isPublish?: boolean;
   createdByMe?: boolean;

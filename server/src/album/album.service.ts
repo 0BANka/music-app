@@ -51,75 +51,102 @@ export class AlbumService {
         })
       : null;
 
+    let albums = [];
+
     if (id) {
-      const albums = await this.albumRepository.find({
-        where: { artistId: id },
-        relations: { artist: true },
-        order: { year: 'ASC' },
-      });
+      switch (currentUser?.role) {
+        case 'admin':
+          albums = await this.albumRepository.find({
+            where: { artistId: id },
+            relations: { artist: true },
+            order: { year: 'ASC' },
+          });
+          break;
+        case 'user':
+          albums = await this.albumRepository.find({
+            where: [
+              { artistId: id, isPublish: true },
+              { artistId: id, user: String(currentUser.id) },
+            ],
+            relations: { artist: true },
+            order: { year: 'ASC' },
+          });
+          break;
+        default:
+          albums = await this.albumRepository.find({
+            where: { artistId: id, isPublish: true },
+            relations: { artist: true },
+            order: { year: 'ASC' },
+          });
+      }
 
       if (albums.length > 0) {
-        const albumsWithTracks = await Promise.all(
-          albums.map(async (album) => {
-            const tracksCount = await this.trackRepository.count({
-              where: { albumId: album.id },
-            });
+        return this.populateAlbumsWithTracks(albums, currentUser);
+      }
 
-            return {
-              ...album,
-              numberOfTracks: tracksCount,
-              createdByMe: currentUser
-                ? String(album.user) === String(currentUser.id)
-                : false,
-            };
-          }),
-        );
+      const artist = await this.artistRepository.findOne({
+        where: { id: String(id) },
+        select: { name: true, isPublish: true },
+      });
 
-        return albumsWithTracks;
-      } else {
-        const artist = await this.artistRepository.findOne({
-          where: { id: String(id) },
-          select: { name: true },
+      if (artist) {
+        return [
+          {
+            artist: {
+              ...artist,
+            },
+          },
+        ];
+      }
+
+      return [];
+    }
+
+    switch (currentUser?.role) {
+      case 'admin':
+        albums = await this.albumRepository.find({
+          relations: { artist: true },
+          order: { year: 'ASC' },
+        });
+        break;
+      case 'user':
+        albums = await this.albumRepository.find({
+          where: [{ isPublish: true }, { user: String(currentUser.id) }],
+          relations: { artist: true },
+          order: { year: 'ASC' },
+        });
+        break;
+      default:
+        albums = await this.albumRepository.find({
+          where: { isPublish: true },
+          relations: { artist: true },
+          order: { year: 'ASC' },
+        });
+    }
+
+    if (albums.length > 0) {
+      return this.populateAlbumsWithTracks(albums, currentUser);
+    }
+
+    return [];
+  }
+
+  async populateAlbumsWithTracks(albums: Album[], currentUser: User) {
+    return Promise.all(
+      albums.map(async (album) => {
+        const tracksCount = await this.trackRepository.count({
+          where: { albumId: album.id },
         });
 
-        if (artist) {
-          return [
-            {
-              artist: {
-                name: artist.name,
-              },
-            },
-          ];
-        } else {
-          return [];
-        }
-      }
-    } else {
-      const albums = await this.albumRepository.find({
-        relations: { artist: true },
-        order: { year: 'ASC' },
-      });
-
-      if (albums.length > 0) {
-        const albumsWithTracks = await Promise.all(
-          albums.map(async (album) => {
-            const tracksCount = await this.trackRepository.count({
-              where: { albumId: album.id },
-            });
-
-            return {
-              ...album,
-              numberOfTracks: tracksCount,
-              createdByMe: currentUser
-                ? String(album.user) === String(currentUser.id)
-                : false,
-            };
-          }),
-        );
-
-        return albumsWithTracks;
-      }
-    }
+        return {
+          ...album,
+          numberOfTracks: tracksCount,
+          createdByMe: currentUser
+            ? String(album.user) === String(currentUser.id)
+            : false,
+        };
+      }),
+    );
   }
 
   async findOne(id: string, token?: string) {

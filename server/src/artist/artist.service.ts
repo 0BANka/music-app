@@ -40,7 +40,7 @@ export class ArtistService {
 
     let artists = [];
 
-    switch (currentUser?.role?.toLowerCase()) {
+    switch (currentUser?.role) {
       case 'admin':
         artists = await this.artistRepository.find();
         break;
