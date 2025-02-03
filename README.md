@@ -36,7 +36,9 @@ Content-Type: application/json
     "author": "Barns Courtney",
     "name": "My Album",
     "year": "2024",
-    "image": "no-photo-available.png"
+    "image": "no-photo-available.png",
+    "isPublish": false,
+    "user": 1
 }
 ```
 
@@ -66,14 +68,18 @@ Content-Type: application/json
     "author": "Barns Courtney",
     "name": "My Album",
     "year": "2024",
-    "image": "no-photo-available.png"
+    "image": "no-photo-available.png",
+    "isPublish": true,
+    "user": 1
   },
   {
     "id": 2,
     "author": "Barns Courtney",
     "name": "My Album 2",
     "year": "2021",
-    "image": "no-photo-available.png"
+    "image": "no-photo-available.png",
+    "isPublish": true,
+    "user": 1
   }
 ]
 ```
@@ -103,11 +109,69 @@ Content-Type: application/json
   "author": "Barns Courtney",
   "name": "My Album",
   "year": "2024",
-  "image": "no-photo-available.png"
+  "image": "no-photo-available.png",
+  "isPublish": true,
+  "user": 1
 }
 ```
 
-### 4. **POST** `/artists`
+### 4. **DELETE** `/albums/:id`
+
+Этот эндпоинт позволяет удалить альбом по его айди.
+
+#### Описание:
+
+При отправке DELETE-запроса на этот путь сервер удаляет альбом с указанным айди.
+Необходимо передавать токен пользователя в заголовке и чтобы пользователь был админом.
+
+#### Пример запроса:
+
+```http
+DELETE /albums/1 HTTP/1.1
+Authorization: some_token
+```
+
+#### Пример ответа:
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "id": 1,
+  "author": "Barns Courtney",
+  "name": "My Album",
+  "year": "2024",
+  "image": "no-photo-available.png",
+  "isPublish": true,
+  "user": 1
+}
+```
+
+### 5. **POST** `/albums/:id/publish`
+
+Этот эндпоинт позволяет опубликовать альбом по его айди.
+
+#### Описание:
+
+При отправке POST-запроса на этот путь сервер публикует альбом с указанным айди. Необходимо передавать токен пользователя в заголовке и чтобы пользователь был админом.
+
+#### Пример запроса:
+
+```http
+DELETE /albums/1 HTTP/1.1
+Authorization: some_token
+```
+
+#### Пример ответа:
+
+```http
+HTTP/1.1 201 OK
+Content-Type: application/json
+
+```
+
+### 6. **POST** `/artists`
 
 Этот эндпоинт сохраняет исполнителя в базе данных.
 
@@ -137,11 +201,13 @@ Content-Type: application/json
     "id": 1,
     "name": "Barns Courtney",
     "info": "My info",
-    "photo": ""
+    "photo": "",
+    "isPublish": true,
+    "user": 1
 }
 ```
 
-### 5. **GET** `/artists`
+### 7. **GET** `/artists`
 
 Этот эндпоинт позволяет получить список всех исполнителей.
 
@@ -166,18 +232,78 @@ Content-Type: application/json
     "id": 1,
     "name": "Barns Courtney",
     "info": "My info",
-    "photo": ""
+    "photo": "",
+    "user": 1,
+    "isPublish": true
   },
   {
     "id": 2,
     "name": "Barns Courtney 2",
     "info": "My info 2",
-    "photo": ""
+    "photo": "",
+    "user": 1,
+    "isPublish": true
   }
 ]
 ```
 
-### 6. **POST** `/tracks`
+### 8. **DELETE** `/artists/:id`
+
+Этот эндпоинт позволяет удалить исполнителя по его айди.
+
+#### Описание:
+
+При отправке DELETE-запроса на этот путь сервер удаляет исполнителя с указанным айди.
+Необходимо передавать токен пользователя в заголовке и чтобы пользователь был админом.
+
+#### Пример запроса:
+
+```http
+DELETE /artists/1 HTTP/1.1
+Authorization: some_token
+```
+
+#### Пример ответа:
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "Barns Courtney",
+  "info": "My info",
+  "photo": "",
+  "isPublish": true,
+  "user": 1
+}
+```
+
+### 9. **POST** `/artists/:id/publish`
+
+Этот эндпоинт позволяет опубликовать артиста по его айди.
+
+#### Описание:
+
+При отправке POST-запроса на этот путь сервер публикует ариста с указанным айди.
+Необходимо передавать токен пользователя в заголовке и чтобы пользователь был админом.
+
+#### Пример запроса:
+
+```http
+DELETE /artists/1 HTTP/1.1
+Authorization: some_token
+```
+
+#### Пример ответа:
+
+```http
+HTTP/1.1 201 OK
+Content-Type: application/json
+
+```
+
+### 10. **POST** `/tracks`
 
 Этот эндпоинт сохраняет трек в базе данных.
 
@@ -197,7 +323,9 @@ Content-Type: application/json
     "duration": "3:00",
     "trackNumber": "1",
     "youtubeLink": "https://www.youtube.com/watch?v=kW2KaAgNcN4",
-    "track": ""
+    "track": "",
+    "user": 1,
+    "isPublish": true
 }
 ```
 
@@ -214,11 +342,13 @@ Content-Type: application/json
     "duration": "3:00",
     "trackNumber": 1,
     "youtubeLink": "kW2KaAgNcN4",
-    "track": ""
+    "track": "",
+    "user": 1,
+    "isPublish": true
 }
 ```
 
-### 7. **GET** `/tracks`
+### 11. **GET** `/tracks`
 
 Этот эндпоинт позволяет получить список всех треков.
 
@@ -239,28 +369,89 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 [
- {
-  "id": 1,
-  "name": "Kicks",
-  "albumId": "1",
-  "duration": "3:00",
-  "trackNumber": 1
-  "track": "",
-  "youtubeLink": ""
- },
- {
-  "id": 2,
-  "name": "Hellfire",
-  "albumId": "2",
-  "duration": "2:41",
-  "trackNumber": 1,
-  "track": "",
-  "youtubeLink": ""
- }
+  {
+    "id": 1,
+    "name": "Kicks",
+    "albumId": "1",
+    "duration": "3:00",
+    "trackNumber": 1
+    "track": "",
+    "youtubeLink": "",
+    "user": 1,
+    "isPublish": true
+  },
+  {
+    "id": 2,
+    "name": "Hellfire",
+    "albumId": "2",
+    "duration": "2:41",
+    "trackNumber": 1,
+    "track": "",
+    "youtubeLink": "",
+    "user": 1,
+    "isPublish": true
+  }
 ]
 ```
 
-### 8. **POST** `/users`
+### 12. **DELETE** `/tracks/:id`
+
+Этот эндпоинт позволяет удалить трек по его айди.
+
+#### Описание:
+
+При отправке DELETE-запроса на этот путь сервер удаляет трек с указанным айди.
+Необходимо передавать токен пользователя в заголовке и чтобы пользователь был админом.
+
+#### Пример запроса:
+
+```http
+DELETE /tracks/1 HTTP/1.1
+Authorization: some_token
+```
+
+#### Пример ответа:
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+    "id": 1,
+    "name": "Kicks",
+    "albumId": "1",
+    "duration": "3:00",
+    "trackNumber": 1,
+    "isPublish": true,
+    "user": 1
+}
+```
+
+### 13. **POST** `/tracks/:id/publish`
+
+Этот эндпоинт позволяет опубликовать трек по его айди.
+
+#### Описание:
+
+При отправке POST-запроса на этот путь сервер публикует трек с указанным айди.
+Необходимо передавать токен пользователя в заголовке и чтобы пользователь был админом.
+
+#### Пример запроса:
+
+```http
+DELETE /tracks/1 HTTP/1.1
+Authorization: some_token
+```
+
+#### Пример ответа:
+
+```http
+HTTP/1.1 201 OK
+Content-Type: application/json
+
+```
+
+### 14. **POST** `/users`
 
 Этот эндпоинт сохраняет пользователя в базе данных.
 
@@ -293,7 +484,7 @@ Content-Type: application/json
 }
 ```
 
-### 9. **POST** `/users/sessions`
+### 15. **POST** `/users/sessions`
 
 Этот эндпоинт позволяет авторизовать пользователя.
 
@@ -325,7 +516,7 @@ Content-Type: application/json
 }
 ```
 
-### 10. **DELETE** `/users/logout`
+### 16. **DELETE** `/users/logout`
 
 Этот эндпоинт позволяет выходить из аккаунта.
 
@@ -347,7 +538,7 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 ```
 
-### 11. **POST** `/track_history`
+### 17. **POST** `/track_history`
 
 Этот эндпоинт позволяет сохранять историю прослушивания треков.
 
@@ -380,7 +571,7 @@ Content-Type: application/json
 }
 ```
 
-### 12. **GET** `/track_history`
+### 18. **GET** `/track_history`
 
 Эндпоинт для получения истории прослушивания треков.
 
@@ -397,7 +588,7 @@ Authorization: some_token
 
 #### Пример ответа:
 
-````http
+```http
 HTTP/1.1 200 OK
 Content-Type: application/json
 
@@ -413,6 +604,46 @@ Content-Type: application/json
       "datetime": "2024-01-01T13:54:16Z"
     }
 ]
+```
+
+### 19. **GET** `/admin/entities-data`
+
+Эндпоинт для получения информации об альбомах, исполнителях и треках.
+
+#### Описание:
+
+При отправке GET-запроса на этот путь сервер возвращает массив объектов альбомов, исполнителей и треков. Необходимо в заголовке указать токен авторизации пользователя. Пользователь должен быть админом.
+
+#### Пример запроса:
+
+```http
+GET /admin/entities-data HTTP/1.1
+Authorization: some_token
+```
+
+#### Пример ответа:
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+[
+    {
+      "id": 1,
+      "name": "Album name",
+      "user": "User",
+      "type": "album",
+      "isPublish": true
+    },
+    {
+      "id": 1,
+      "name": "Artist name",
+      "user": "User",
+      "type": "artist",
+      "isPublish": true
+    }
+]
+```
 
 ## Запуск проекта
 
@@ -428,7 +659,7 @@ DB_PORT = 3306
 DB_USER = 'root'
 DB_PASSWORD = '111'
 DB_DATABASE = 'MY_DATABASE'
-````
+```
 
 4. Перейдите в папку `/client`.
 5. Создайте в ней файл `.env`.

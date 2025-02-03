@@ -10,12 +10,17 @@ import {
   UploadedFile,
   UseGuards,
   Headers,
+  Delete,
+  Param,
 } from '@nestjs/common';
 import { storage } from 'src/storageConfig';
 import { TrackService } from './track.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from 'src/user/auth.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { RolesGuard } from 'src/role/roles.guard';
+import { Role } from 'src/role/enums/role.enum';
 
 @Controller('tracks')
 export class TrackController {
@@ -50,5 +55,21 @@ export class TrackController {
     }
 
     return this.trackService.findAll(headers.authorization, album, artist);
+  }
+
+  @Delete(':id')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
+  remove(@Param('id') id: string) {
+    return this.trackService.remove(id);
+  }
+
+  @Post(':id/publish')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
+  publish(@Param('id') id: string) {
+    return this.trackService.publish(id);
   }
 }

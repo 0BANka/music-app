@@ -26,6 +26,22 @@ export const fetchTracks = createAsyncThunk(
   },
 );
 
+export const deleteTrack = createAsyncThunk(
+  'delete/track',
+  async (trackId: string) => {
+    const { data } = await axiosApiClient.delete(`/tracks/${trackId}`);
+    return data;
+  },
+);
+
+export const publishTrack = createAsyncThunk(
+  'publish/track',
+  async (trackId: string) => {
+    const { data } = await axiosApiClient.post(`/tracks/${trackId}/publish`);
+    return data;
+  },
+);
+
 export const createTrack = createAsyncThunk(
   'create/track',
   async (payload: FormData) => {
@@ -64,6 +80,28 @@ const tracksSlice = createSlice({
       .addCase(createTrack.fulfilled, (state, action) => {
         state.tracks = [...state.tracks, action.payload];
         state.loading = false;
+      })
+      .addCase(deleteTrack.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteTrack.fulfilled, (state, action) => {
+        state.tracks = state.tracks.filter(
+          (track) => track.id !== action.payload.id,
+        );
+      })
+      .addCase(publishTrack.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(publishTrack.fulfilled, (state, action) => {
+        state.tracks = state.tracks.map((track) => {
+          if (track.id === action.payload.id) {
+            return {
+              ...track,
+              isPublish: true,
+            };
+          }
+          return track;
+        });
       });
   },
 });

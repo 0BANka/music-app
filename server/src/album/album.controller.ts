@@ -11,12 +11,16 @@ import {
   Query,
   UseGuards,
   Headers,
+  Delete,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { storage } from '../storageConfig';
 import { AuthGuard } from 'src/user/auth.guard';
+import { RolesGuard } from 'src/role/roles.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/role/enums/role.enum';
 
 @Controller('albums')
 export class AlbumController {
@@ -56,5 +60,21 @@ export class AlbumController {
     }
 
     return album;
+  }
+
+  @Delete(':id')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
+  remove(@Param('id') id: string) {
+    return this.albumService.remove(id);
+  }
+
+  @Post(':id/publish')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
+  publish(@Param('id') id: string) {
+    return this.albumService.publish(id);
   }
 }

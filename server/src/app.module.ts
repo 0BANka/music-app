@@ -15,11 +15,11 @@ import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
 import { TrackHistoryModule } from './track-history/track-history.module';
 import { TrackHistory } from './track-history/entities/track-history.entity';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    ArtistModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
     }),
@@ -30,13 +30,15 @@ import { TrackHistory } from './track-history/entities/track-history.entity';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [Artist, Album, Track, User, TrackHistory],
+      entities: [User, Artist, Album, Track, TrackHistory],
       synchronize: true,
     }),
+    UserModule,
+    ArtistModule,
     AlbumModule,
     TrackModule,
-    UserModule,
     TrackHistoryModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],

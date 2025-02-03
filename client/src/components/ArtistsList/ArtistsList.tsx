@@ -9,12 +9,13 @@ import './ArtistsList.sass';
 
 export function ArtistsList() {
   const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.user);
   const { artists, artistsLoading } = useAppSelector((state) => state.artists);
   const [data, setData] = useState<IArtist[]>([]);
 
   useEffect(() => {
     dispatch(fetchArtists());
-  }, [dispatch]);
+  }, [dispatch, user?.token]);
 
   useEffect(() => {
     if (artists.length > 0 && Array.isArray(artists)) {
@@ -29,13 +30,13 @@ export function ArtistsList() {
       <div className="artists-list-container">
         <h1 className="artists-list-title">Artists</h1>
         {artistsLoading && <Loader />}
-        {data.length > 0 ? (
+        {data.length > 0 && !artistsLoading && data[0]?.name ? (
           data.map((element) => (
             <ArtistItem key={element.id} artist={element} />
           ))
         ) : (
           <>
-            <h3>No artists found.</h3>
+            <h3 className="no-entities-found">No artists found.</h3>
           </>
         )}
       </div>

@@ -9,9 +9,9 @@ export default class TrackSeeder implements Seeder {
   ): Promise<void> {
     await dataSource.query('SET foreign_key_checks = 0;');
     await dataSource.query('TRUNCATE TABLE `track`;');
-    await dataSource.query('SET foreign_key_checks = 1;');
 
     const trackFactory = factoryManager.get(Track);
     await trackFactory.saveMany(50);
+    await dataSource.query('SET foreign_key_checks = 1;');
   }
 }

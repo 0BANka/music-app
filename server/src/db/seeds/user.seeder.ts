@@ -11,7 +11,6 @@ export default class UserSeeder implements Seeder {
   ): Promise<void> {
     await dataSource.query('SET foreign_key_checks = 0;');
     await dataSource.query('TRUNCATE TABLE `user`;');
-    await dataSource.query('SET foreign_key_checks = 1;');
 
     const userRepo = dataSource.getRepository(User);
 
@@ -24,5 +23,6 @@ export default class UserSeeder implements Seeder {
 
     const userFactory = factoryManager.get(User);
     await userFactory.save();
+    await dataSource.query('SET foreign_key_checks = 1;');
   }
 }

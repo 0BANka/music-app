@@ -1,10 +1,10 @@
+import Link from 'next/link';
 import { Header } from 'antd/es/layout/layout';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { logoutUser } from '@/features/userSlice';
 import { AuthModal } from '@/components/AuthModal/AuthModal';
-import Link from 'next/link';
 
 import './AppToolBar.sass';
-import { logoutUser } from '@/features/userSlice';
 
 export function AppToolbar() {
   const dispatch = useAppDispatch();
@@ -52,6 +52,13 @@ export function AppToolbar() {
                   Add track
                 </Link>
               </div>
+              {user?.role === 'admin' && (
+                <div className="menu-items">
+                  <Link href="/admin-panel" className="menu-link">
+                    Admin panel
+                  </Link>
+                </div>
+              )}
             </>
           )}
         </ul>

@@ -13,15 +13,16 @@ interface Props {
 
 export function AlbumsList({ artistId }: Props) {
   const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.user);
   const { albums, albumsLoading } = useAppSelector((state) => state.albums);
   const [data, setData] = useState<IAlbum[]>([]);
 
   useEffect(() => {
     dispatch(fetchAlbums(artistId));
-  }, [dispatch, artistId]);
+  }, [dispatch, artistId, user?.token]);
 
   useEffect(() => {
-    if (albums.length > 0 && Array.isArray(albums)) {
+    if (albums.length > 0 && Array.isArray(albums) && albums[0].name) {
       setData(albums);
     } else {
       setData([]);
@@ -33,16 +34,16 @@ export function AlbumsList({ artistId }: Props) {
       <div className="albums-list-container">
         <h1 className="albums-list-title">Albums</h1>
         <h2 className="albums-artist-title">
-          {albums.length && !albumsLoading ? albums[0].artist.name : ''}
+          {albums.length > 0 && !albumsLoading ? albums[0].artist.name : ''}
         </h2>
         {albumsLoading && <Loader />}
-        {data.length > 0 && !albumsLoading ? (
+        {data.length > 0 && !albumsLoading && data[0]?.name ? (
           data.map((element, index) => (
             <AlbumItem key={index} album={element} />
           ))
         ) : (
           <>
-            <h3>No albums found.</h3>
+            <h3 className="no-entities-found">No albums found.</h3>
           </>
         )}
       </div>

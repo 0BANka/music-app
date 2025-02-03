@@ -22,10 +22,10 @@ export function TracksList({ albumId }: Props) {
 
   useEffect(() => {
     dispatch(fetchTracks(albumId));
-  }, [dispatch, albumId]);
+  }, [dispatch, albumId, user?.id]);
 
   useEffect(() => {
-    if (tracks.length > 0 && Array.isArray(tracks)) {
+    if (tracks.length > 0 && Array.isArray(tracks) && tracks[0].name) {
       setData(tracks);
     } else {
       setData([]);
@@ -66,13 +66,13 @@ export function TracksList({ albumId }: Props) {
         <div className="tracks-list-container">
           <h1 className="tracks-list-title">Tracks</h1>
           <h2 className="tracks-artist-title">
-            {tracks.length && !loading ? tracks[0].album.artist.name : ''}
+            {tracks.length > 0 && !loading ? tracks[0].album?.artist?.name : ''}
           </h2>
           <h3 className="tracks-album-title">
-            {tracks.length && !loading ? tracks[0].album.name : ''}
+            {tracks.length > 0 && !loading ? tracks[0].album?.name : ''}
           </h3>
           {loading && <Loader />}
-          {data.length > 0 ? (
+          {data.length > 0 && !loading && data[0]?.name ? (
             data.map((element, index) => (
               <TrackItem
                 key={index}
@@ -82,7 +82,7 @@ export function TracksList({ albumId }: Props) {
             ))
           ) : (
             <>
-              <h3>No tracks found.</h3>
+              <h3 className="no-entities-found">No tracks found.</h3>
             </>
           )}
         </div>

@@ -1,4 +1,4 @@
-import { Dropdown, MenuProps } from 'antd';
+import { Badge, Dropdown, MenuProps } from 'antd';
 import { EllipsisOutlined, PlayCircleFilled } from '@ant-design/icons';
 import AudioPlayer from 'react-h5-audio-player';
 import { useAppDispatch } from '@/store/hooks';
@@ -16,7 +16,8 @@ interface Props {
 
 export function TrackItem({ trackItem, onClickTrack }: Props) {
   const dispatch = useAppDispatch();
-  const { trackNumber, name, duration, id, youtubeLink, track } = trackItem;
+  const { trackNumber, name, duration, id, youtubeLink, track, isPublish } =
+    trackItem;
 
   let audio = '';
 
@@ -55,33 +56,49 @@ export function TrackItem({ trackItem, onClickTrack }: Props) {
     items,
   };
 
-  return (
-    <div className="track-container">
-      <div className="track" onClick={handleClick}>
-        <div className="track-info">
-          <div className="track-name-container">
-            <span className="track-number">{trackNumber}</span>
-            <span className="track-name">{name}</span>
-          </div>
-          <div className="track-actions">
-            <span className="track-duration">{duration}</span>
-            <Dropdown
-              className="track-dropdown"
-              placement="bottomLeft"
-              menu={menuProps}
-              trigger={['hover', 'click']}
-              disabled={!youtubeLink}
-            >
-              <EllipsisOutlined
-                className="track-ellipsis"
-                onClick={(e) => e.stopPropagation()}
-              />
-            </Dropdown>
-            {youtubeLink && <YouTubeModal youtubeLink={youtubeLink} />}
+  function renderTrack() {
+    return (
+      <div className="track-container">
+        <div className="track" onClick={handleClick}>
+          <div className="track-info">
+            <div className="track-name-container">
+              <span className="track-number">{trackNumber}</span>
+              <span className="track-name">{name}</span>
+            </div>
+            <div className="track-actions">
+              <span className="track-duration">{duration}</span>
+              {youtubeLink && (
+                <>
+                  <Dropdown
+                    className="track-dropdown"
+                    placement="bottomLeft"
+                    menu={menuProps}
+                    trigger={['hover', 'click']}
+                    disabled={!youtubeLink}
+                  >
+                    <EllipsisOutlined
+                      className="track-ellipsis"
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  </Dropdown>
+                  <YouTubeModal youtubeLink={youtubeLink} />
+                </>
+              )}
+            </div>
           </div>
         </div>
+        {track && <Player />}
       </div>
-      {track && <Player />}
-    </div>
+    );
+  }
+
+  return (
+    <>
+      {!isPublish ? (
+        <Badge.Ribbon text="Unpublished">{renderTrack()}</Badge.Ribbon>
+      ) : (
+        renderTrack()
+      )}
+    </>
   );
 }
