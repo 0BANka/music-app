@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import * as path from 'path';
 import { Repository } from 'typeorm';
 import { parseFile } from 'music-metadata';
@@ -8,6 +12,7 @@ import { Track } from './entities/track.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { Album } from 'src/album/entities/album.entity';
+import { TrackHistory } from 'src/track-history/entities/track-history.entity';
 
 @Injectable()
 export class TrackService {
@@ -20,6 +25,9 @@ export class TrackService {
 
     @InjectRepository(Album)
     private albumRepository: Repository<Album>,
+
+    @InjectRepository(TrackHistory)
+    private trackHistoryRepository: Repository<TrackHistory>,
   ) {}
 
   durationFormate(duration: number) {
@@ -241,5 +249,29 @@ export class TrackService {
     }
 
     return tracksProcessed;
+  }
+
+  async remove(id: string) {
+    const track = await this.trackRepository.findOne({ where: { id } });
+
+    if (!track) {
+      throw new NotFoundException('Track not found');
+    }
+
+    await this.trackHistoryRepository.delete({ track: id });
+
+    await this.trackRepository.delete(id);
+
+    return track;
+  }
+
+  async publish(id: string) {
+    const track = await this.trackRepository.findOne({ where: { id } });
+
+    if (!track) {
+      throw new NotFoundException('Track not found');
+    }
+
+    return await this.trackRepository.update(id, { isPublish: true });
   }
 }

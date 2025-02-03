@@ -6,9 +6,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { Album } from 'src/album/entities/album.entity';
+import { TrackHistory } from 'src/track-history/entities/track-history.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Track, User, Album])],
+  imports: [TypeOrmModule.forFeature([Track, User, Album, TrackHistory])],
   controllers: [TrackController],
   providers: [TrackService, UserService],
 })
