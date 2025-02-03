@@ -7,6 +7,7 @@ import { CreateTrackDto } from './dto/create-track.dto';
 import { Track } from './entities/track.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/entities/user.entity';
+import { Album } from 'src/album/entities/album.entity';
 
 @Injectable()
 export class TrackService {
@@ -16,6 +17,9 @@ export class TrackService {
 
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+
+    @InjectRepository(Album)
+    private albumRepository: Repository<Album>,
   ) {}
 
   durationFormate(duration: number) {
@@ -128,22 +132,84 @@ export class TrackService {
       ? await this.usersRepository.findOne({ where: { token } })
       : null;
 
-    const whereCondition: {
-      albumId?: string;
-      album?: { artist: { id: string } };
-    } = {};
+    let tracks = [];
 
     if (album) {
-      whereCondition.albumId = album;
+      switch (currentUser?.role) {
+        case 'admin':
+          tracks = await this.trackRepository.find({
+            where: { albumId: album },
+            relations: {
+              album: { artist: true },
+            },
+            order: { trackNumber: 'ASC' },
+          });
+          break;
+        case 'user':
+          tracks = await this.trackRepository.find({
+            where: [
+              { isPublish: true, albumId: album },
+              { user: String(currentUser.id), albumId: album },
+            ],
+            relations: {
+              album: { artist: true },
+            },
+            order: { trackNumber: 'ASC' },
+          });
+          break;
+        default:
+          tracks = await this.trackRepository.find({
+            where: { isPublish: true, albumId: album },
+            relations: {
+              album: { artist: true },
+            },
+            order: { trackNumber: 'ASC' },
+          });
+      }
     } else if (artist) {
-      whereCondition.album = { artist: { id: artist } };
+      switch (currentUser?.role) {
+        case 'admin':
+          tracks = await this.trackRepository.find({
+            where: {
+              album: {
+                artist: { id: artist },
+              },
+            },
+            relations: {
+              album: { artist: true },
+            },
+            order: { trackNumber: 'ASC' },
+          });
+          break;
+        case 'user':
+          tracks = await this.trackRepository.find({
+            where: [
+              {
+                isPublish: true,
+                album: {
+                  artist: { id: artist },
+                },
+              },
+              {
+                user: String(currentUser.id),
+                album: {
+                  artist: { id: artist },
+                },
+              },
+            ],
+          });
+          break;
+        default:
+          tracks = await this.trackRepository.find({
+            where: {
+              isPublish: true,
+              album: {
+                artist: { id: artist },
+              },
+            },
+          });
+      }
     }
-
-    const tracks = await this.trackRepository.find({
-      where: whereCondition,
-      relations: { album: { artist: true } },
-      order: { trackNumber: 'ASC' },
-    });
 
     const tracksProcessed = tracks.map((track) => ({
       ...track,
@@ -151,6 +217,28 @@ export class TrackService {
         ? String(track.user) === String(currentUser.id)
         : false,
     }));
+
+    if (tracksProcessed.length === 0) {
+      if (album) {
+        const existingAlbum = await this.albumRepository.find({
+          where: { id: album },
+          relations: { artist: true },
+          select: { name: true, isPublish: true },
+        });
+
+        return [
+          {
+            album: {
+              name: existingAlbum[0].name,
+              isPublish: existingAlbum[0].isPublish,
+              artist: {
+                name: existingAlbum[0].artist.name,
+              },
+            },
+          },
+        ];
+      }
+    }
 
     return tracksProcessed;
   }

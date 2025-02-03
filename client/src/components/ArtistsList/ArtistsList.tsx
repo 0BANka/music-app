@@ -36,7 +36,7 @@ export function ArtistsList() {
           ))
         ) : (
           <>
-            <h3>No artists found.</h3>
+            <h3 className="no-entities-found">No artists found.</h3>
           </>
         )}
       </div>

@@ -23,7 +23,7 @@ export const withAuth = (WrappedComponent: ElementType, role: Role) => {
 
     return loading ? (
       <Loader />
-    ) : role === user?.role ? (
+    ) : role === user?.role || user?.role === Role.ADMIN ? (
       <WrappedComponent {...props} />
     ) : (
       <>

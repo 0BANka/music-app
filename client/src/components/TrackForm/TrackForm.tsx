@@ -58,7 +58,7 @@ export function TrackForm() {
         case 'artistId':
           break;
         case 'youtubeLink':
-          if (String(value).trim()) {
+          if (String(value).trim() && value !== undefined) {
             formData.append(name, String(value).trim());
           } else {
             formData.append(name, '');

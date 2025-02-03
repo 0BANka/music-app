@@ -34,7 +34,7 @@ export function AlbumsList({ artistId }: Props) {
       <div className="albums-list-container">
         <h1 className="albums-list-title">Albums</h1>
         <h2 className="albums-artist-title">
-          {albums.length && !albumsLoading ? albums[0].artist.name : ''}
+          {albums.length > 0 && !albumsLoading ? albums[0].artist.name : ''}
         </h2>
         {albumsLoading && <Loader />}
         {data.length > 0 && !albumsLoading && data[0].name ? (
@@ -43,7 +43,7 @@ export function AlbumsList({ artistId }: Props) {
           ))
         ) : (
           <>
-            <h3>No albums found.</h3>
+            <h3 className="no-entities-found">No albums found.</h3>
           </>
         )}
       </div>
