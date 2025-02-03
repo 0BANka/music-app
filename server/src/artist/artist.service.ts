@@ -35,22 +35,29 @@ export class ArtistService {
 
   async findAll(token?: string) {
     const currentUser = token
-      ? await this.usersRepository.findOne({
-          where: { token },
-        })
+      ? await this.usersRepository.findOne({ where: { token } })
       : null;
 
-    const artists = await this.artistRepository.find();
+    let artists = [];
 
-    const artistsProcessed = artists.map((artist) => {
-      return {
-        ...artist,
-        createdByMe: currentUser
-          ? String(artist.user) === String(currentUser.id)
-          : false,
-      };
-    });
+    switch (currentUser?.role?.toLowerCase()) {
+      case 'admin':
+        artists = await this.artistRepository.find();
+        break;
+      case 'user':
+        artists = await this.artistRepository.find({
+          where: [{ isPublish: true }, { user: String(currentUser.id) }],
+        });
+        break;
+      default:
+        artists = await this.artistRepository.find({
+          where: { isPublish: true },
+        });
+    }
 
-    return artistsProcessed;
+    return artists.map((artist) => ({
+      ...artist,
+      createdByMe: currentUser ? artist.user === currentUser.id : false,
+    }));
   }
 }

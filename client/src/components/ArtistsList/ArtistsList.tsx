@@ -9,12 +9,13 @@ import './ArtistsList.sass';
 
 export function ArtistsList() {
   const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.user);
   const { artists, artistsLoading } = useAppSelector((state) => state.artists);
   const [data, setData] = useState<IArtist[]>([]);
 
   useEffect(() => {
     dispatch(fetchArtists());
-  }, [dispatch]);
+  }, [dispatch, user?.token]);
 
   useEffect(() => {
     if (artists.length > 0 && Array.isArray(artists)) {

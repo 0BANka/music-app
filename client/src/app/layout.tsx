@@ -51,6 +51,10 @@ export default function RootLayout({
                 colorPrimary: '#333',
                 colorPrimaryHover: '#000',
               },
+              Badge: {
+                colorPrimary: '#ddd',
+                colorTextLightSolid: '#333',
+              },
             },
           }}
         >
