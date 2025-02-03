@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { AxiosError } from 'axios';
 import { axiosApiClient } from '@/helpers/axiosApiClient';
 import { IArtist } from '@/interfaces/IArtist';
-import { AxiosError } from 'axios';
 
 interface State {
   artists: IArtist[];
@@ -20,7 +20,7 @@ export const fetchArtists = createAsyncThunk('fetch/artists', async () => {
 });
 
 export const createArtist = createAsyncThunk(
-  'create/artists',
+  'create/artist',
   async (payload: FormData) => {
     try {
       const { data } = await axiosApiClient.post('/artists', payload);
