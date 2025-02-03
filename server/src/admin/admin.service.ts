@@ -9,9 +9,6 @@ import { User } from 'src/user/entities/user.entity';
 @Injectable()
 export class AdminService {
   constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
-
     @InjectRepository(Track)
     private trackRepository: Repository<Track>,
 

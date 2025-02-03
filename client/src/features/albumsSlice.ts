@@ -24,6 +24,22 @@ export const fetchAlbums = createAsyncThunk(
   },
 );
 
+export const deleteAlbum = createAsyncThunk(
+  'delete/album',
+  async (albumId: string) => {
+    const { data } = await axiosApiClient.delete(`/albums/${albumId}`);
+    return data;
+  },
+);
+
+export const publishAlbum = createAsyncThunk(
+  'publish/album',
+  async (albumId: string) => {
+    const { data } = await axiosApiClient.delete(`/albums/${albumId}/publish`);
+    return data;
+  },
+);
+
 export const createAlbum = createAsyncThunk(
   'create/album',
   async (payload: FormData) => {
@@ -58,6 +74,28 @@ const albumsSlice = createSlice({
       .addCase(createAlbum.fulfilled, (state, action) => {
         state.albums = [...state.albums, action.payload];
         state.albumsLoading = false;
+      })
+      .addCase(deleteAlbum.pending, (state) => {
+        state.albumsLoading = true;
+      })
+      .addCase(deleteAlbum.fulfilled, (state, action) => {
+        state.albums = state.albums.filter(
+          (album) => album.id !== action.payload.id,
+        );
+      })
+      .addCase(publishAlbum.pending, (state) => {
+        state.albumsLoading = true;
+      })
+      .addCase(publishAlbum.fulfilled, (state, action) => {
+        state.albums = state.albums.map((album) => {
+          if (album.id === action.payload.id) {
+            return {
+              ...album,
+              isPublish: true,
+            };
+          }
+          return album;
+        });
       });
   },
 });

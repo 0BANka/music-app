@@ -19,6 +19,24 @@ export const fetchArtists = createAsyncThunk('fetch/artists', async () => {
   return data;
 });
 
+export const deleteArtist = createAsyncThunk(
+  'delete/artist',
+  async (artistId: string) => {
+    const { data } = await axiosApiClient.delete(`/artists/${artistId}`);
+    return data;
+  },
+);
+
+export const publishArtist = createAsyncThunk(
+  'publish/artist',
+  async (artistId: string) => {
+    const { data } = await axiosApiClient.delete(
+      `/artists/${artistId}/publish`,
+    );
+    return data;
+  },
+);
+
 export const createArtist = createAsyncThunk(
   'create/artist',
   async (payload: FormData) => {
@@ -53,6 +71,28 @@ const artistsSlice = createSlice({
       .addCase(createArtist.fulfilled, (state, action) => {
         state.artists = [...state.artists, action.payload];
         state.artistsLoading = false;
+      })
+      .addCase(deleteArtist.pending, (state) => {
+        state.artistsLoading = true;
+      })
+      .addCase(deleteArtist.fulfilled, (state, action) => {
+        state.artists = state.artists.filter(
+          (artist) => artist.id !== action.payload.id,
+        );
+      })
+      .addCase(publishArtist.pending, (state) => {
+        state.artistsLoading = true;
+      })
+      .addCase(publishArtist.fulfilled, (state, action) => {
+        state.artists = state.artists.map((artist) => {
+          if (artist.id === action.payload.id) {
+            return {
+              ...artist,
+              isPublish: true,
+            };
+          }
+          return artist;
+        });
       });
   },
 });
