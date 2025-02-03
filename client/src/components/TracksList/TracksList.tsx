@@ -72,7 +72,7 @@ export function TracksList({ albumId }: Props) {
             {tracks.length > 0 && !loading ? tracks[0].album?.name : ''}
           </h3>
           {loading && <Loader />}
-          {data.length > 0 && !loading && data[0].name ? (
+          {data.length > 0 && !loading && data[0]?.name ? (
             data.map((element, index) => (
               <TrackItem
                 key={index}

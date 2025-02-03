@@ -35,7 +35,7 @@ export const deleteAlbum = createAsyncThunk(
 export const publishAlbum = createAsyncThunk(
   'publish/album',
   async (albumId: string) => {
-    const { data } = await axiosApiClient.delete(`/albums/${albumId}/publish`);
+    const { data } = await axiosApiClient.post(`/albums/${albumId}/publish`);
     return data;
   },
 );

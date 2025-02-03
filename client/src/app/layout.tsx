@@ -55,6 +55,10 @@ export default function RootLayout({
                 colorPrimary: '#ddd',
                 colorTextLightSolid: '#333',
               },
+              Pagination: {
+                colorPrimary: '#333',
+                colorPrimaryHover: '#000',
+              },
             },
           }}
         >

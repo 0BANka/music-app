@@ -37,7 +37,7 @@ export const deleteTrack = createAsyncThunk(
 export const publishTrack = createAsyncThunk(
   'publish/track',
   async (trackId: string) => {
-    const { data } = await axiosApiClient.delete(`/tracks/${trackId}/publish`);
+    const { data } = await axiosApiClient.post(`/tracks/${trackId}/publish`);
     return data;
   },
 );

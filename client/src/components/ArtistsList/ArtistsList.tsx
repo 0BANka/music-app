@@ -30,7 +30,7 @@ export function ArtistsList() {
       <div className="artists-list-container">
         <h1 className="artists-list-title">Artists</h1>
         {artistsLoading && <Loader />}
-        {data.length > 0 ? (
+        {data.length > 0 && !artistsLoading && data[0]?.name ? (
           data.map((element) => (
             <ArtistItem key={element.id} artist={element} />
           ))

@@ -20,7 +20,7 @@ export class ArtistService {
     @InjectRepository(Album)
     private albumRepository: Repository<Album>,
 
-    @InjectRepository(User)
+    @InjectRepository(Track)
     private trackRepository: Repository<Track>,
 
     @InjectRepository(TrackHistory)

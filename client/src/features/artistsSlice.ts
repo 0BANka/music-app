@@ -30,9 +30,7 @@ export const deleteArtist = createAsyncThunk(
 export const publishArtist = createAsyncThunk(
   'publish/artist',
   async (artistId: string) => {
-    const { data } = await axiosApiClient.delete(
-      `/artists/${artistId}/publish`,
-    );
+    const { data } = await axiosApiClient.post(`/artists/${artistId}/publish`);
     return data;
   },
 );

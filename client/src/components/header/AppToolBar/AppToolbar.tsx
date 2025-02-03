@@ -52,6 +52,13 @@ export function AppToolbar() {
                   Add track
                 </Link>
               </div>
+              {user?.role === 'admin' && (
+                <div className="menu-items">
+                  <Link href="/admin-panel" className="menu-link">
+                    Admin panel
+                  </Link>
+                </div>
+              )}
             </>
           )}
         </ul>
