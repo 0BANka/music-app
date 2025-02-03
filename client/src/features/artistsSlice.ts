@@ -6,11 +6,11 @@ import { IArtist } from '@/interfaces/IArtist';
 interface State {
   artists: IArtist[];
   error?: Error;
-  loading: boolean;
+  artistsLoading: boolean;
 }
 
 const initialState: State = {
-  loading: false,
+  artistsLoading: false,
   artists: [],
 };
 
@@ -41,18 +41,18 @@ const artistsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchArtists.pending, (state) => {
-        state.loading = true;
+        state.artistsLoading = true;
       })
       .addCase(fetchArtists.fulfilled, (state, action) => {
         state.artists = action.payload;
-        state.loading = false;
+        state.artistsLoading = false;
       })
       .addCase(createArtist.pending, (state) => {
-        state.loading = true;
+        state.artistsLoading = true;
       })
       .addCase(createArtist.fulfilled, (state, action) => {
         state.artists = [...state.artists, action.payload];
-        state.loading = false;
+        state.artistsLoading = false;
       });
   },
 });

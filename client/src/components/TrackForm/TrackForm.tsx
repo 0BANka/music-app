@@ -13,20 +13,25 @@ import {
 } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { createAlbum } from '@/features/albumsSlice';
+import { createAlbum, fetchAlbums } from '@/features/albumsSlice';
 import { fetchArtists } from '@/features/artistsSlice';
 
 export function AlbumForm() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { artists, artistsLoading } = useAppSelector((state) => state.artists);
+  const { albums, albumsLoading } = useAppSelector((state) => state.albums);
   const [error, setError] = useState([]);
 
   useEffect(() => {
     if (!artists.length) {
       dispatch(fetchArtists());
     }
-  }, [dispatch, artists.length]);
+
+    if (!albums.length) {
+      dispatch(fetchAlbums());
+    }
+  }, [dispatch, artists.length, albums.length]);
 
   const onFinish = async (values: { [key: string]: string }) => {
     const formData: FormData = new FormData();
@@ -93,7 +98,7 @@ export function AlbumForm() {
           <DatePicker picker="year" />
         </Form.Item>
         <Form.Item name="artistId" label="Artist">
-          <Select loading={artistsLoading} placeholder="Please select artist">
+          <Select loading={loading} placeholder="Please select artist">
             {artists.map((artist) => (
               <Select.Option key={artist.id} value={artist.id}>
                 {artist.name}

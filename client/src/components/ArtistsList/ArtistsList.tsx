@@ -9,7 +9,7 @@ import './ArtistsList.sass';
 
 export function ArtistsList() {
   const dispatch = useAppDispatch();
-  const { artists, loading } = useAppSelector((state) => state.artists);
+  const { artists, artistsLoading } = useAppSelector((state) => state.artists);
   const [data, setData] = useState<IArtist[]>([]);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export function ArtistsList() {
     <div className="container">
       <div className="artists-list-container">
         <h1 className="artists-list-title">Artists</h1>
-        {loading && <Loader />}
+        {artistsLoading && <Loader />}
         {data.length > 0 ? (
           data.map((element) => (
             <ArtistItem key={element.id} artist={element} />

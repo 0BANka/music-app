@@ -6,11 +6,11 @@ import { IAlbum } from '@/interfaces/IAlbum';
 interface State {
   albums: IAlbum[];
   error?: Error;
-  loading: boolean;
+  albumsLoading: boolean;
 }
 
 const initialState: State = {
-  loading: false,
+  albumsLoading: false,
   albums: [],
 };
 
@@ -46,18 +46,18 @@ const albumsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchAlbums.pending, (state) => {
-        state.loading = true;
+        state.albumsLoading = true;
       })
       .addCase(fetchAlbums.fulfilled, (state, action) => {
         state.albums = action.payload;
-        state.loading = false;
+        state.albumsLoading = false;
       })
       .addCase(createAlbum.pending, (state) => {
-        state.loading = true;
+        state.albumsLoading = true;
       })
       .addCase(createAlbum.fulfilled, (state, action) => {
         state.albums = [...state.albums, action.payload];
-        state.loading = false;
+        state.albumsLoading = false;
       });
   },
 });
