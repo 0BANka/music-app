@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { Artist } from './entities/artist.entity';
 import { User } from 'src/user/entities/user.entity';
+import { Album } from 'src/album/entities/album.entity';
+import { Track } from 'src/track/entities/track.entity';
 
 @Injectable()
 export class ArtistService {
@@ -13,6 +15,12 @@ export class ArtistService {
 
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+
+    @InjectRepository(Album)
+    private albumRepository: Repository<Album>,
+
+    @InjectRepository(User)
+    private trackRepository: Repository<Track>,
   ) {}
 
   async create(
@@ -59,5 +67,34 @@ export class ArtistService {
       ...artist,
       createdByMe: currentUser ? artist.user === currentUser.id : false,
     }));
+  }
+
+  async remove(id: string) {
+    const artist = await this.artistRepository.findOne({ where: { id } });
+
+    if (!artist) {
+      throw new NotFoundException('Artist not found');
+    }
+
+    const albums = await this.albumRepository.find({ where: { artistId: id } });
+
+    if (albums.length > 0) {
+      const albumIds = albums.map((album) => album.id);
+      await this.trackRepository.delete({ albumId: In(albumIds) });
+
+      await this.albumRepository.delete({ artistId: id });
+    }
+
+    return await this.artistRepository.delete(id);
+  }
+
+  async publish(id: string) {
+    const artist = await this.artistRepository.findOne({ where: { id } });
+
+    if (!artist) {
+      throw new NotFoundException('Artist not found');
+    }
+
+    return await this.artistRepository.update(id, { isPublish: true });
   }
 }
