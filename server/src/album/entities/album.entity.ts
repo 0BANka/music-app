@@ -1,4 +1,5 @@
 import { Artist } from 'src/artist/entities/artist.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   Entity,
@@ -25,9 +26,16 @@ export class Album {
   @Column()
   year: string;
 
+  @Column({ nullable: true })
+  image?: string;
+
   @Column({ default: 0 })
   isPublish: boolean;
 
-  @Column({ nullable: true })
-  image?: string;
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'user' })
+  userId: User;
+
+  @Column()
+  user: string;
 }

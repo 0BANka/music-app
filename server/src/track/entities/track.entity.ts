@@ -1,4 +1,5 @@
 import { Album } from 'src/album/entities/album.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   Entity,
@@ -28,12 +29,19 @@ export class Track {
   @Column()
   duration: string;
 
-  @Column({ default: 0 })
-  isPublish: boolean;
-
   @Column({ nullable: true })
   youtubeLink?: string;
 
   @Column({ nullable: true })
   track?: string;
+
+  @Column({ default: 0 })
+  isPublish: boolean;
+
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'user' })
+  userId: User;
+
+  @Column()
+  user: string;
 }
