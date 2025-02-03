@@ -35,6 +35,22 @@ export default function RootLayout({
                 contentBg: '#f0f0f0',
                 boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
               },
+              Select: {
+                colorPrimary: '#333',
+                colorPrimaryHover: '#000',
+              },
+              DatePicker: {
+                colorPrimary: '#333',
+                colorPrimaryHover: '#000',
+              },
+              Upload: {
+                colorPrimary: '#333',
+                colorPrimaryHover: '#000',
+              },
+              InputNumber: {
+                colorPrimary: '#333',
+                colorPrimaryHover: '#000',
+              },
             },
           }}
         >

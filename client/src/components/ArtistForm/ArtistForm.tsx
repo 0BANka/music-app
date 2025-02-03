@@ -8,7 +8,7 @@ import { createArtist } from '@/features/artistsSlice';
 export function ArtistForm() {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const [error, setError] = useState([]);
+  const [error, setError] = useState<string[]>([]);
 
   const onFinish = async (values: { [key: string]: string }) => {
     const formData: FormData = new FormData();
@@ -24,7 +24,11 @@ export function ArtistForm() {
       setError([]);
       router.push('/');
     } else {
-      setError(response);
+      if (!Array.isArray(response)) {
+        setError([response]);
+      } else {
+        setError(response);
+      }
     }
   };
 
@@ -37,7 +41,7 @@ export function ArtistForm() {
         name="artist-create"
         className="create-form"
       >
-        {error.length > 0 && (
+        {error.length > 0 && Array.isArray(error) && (
           <>
             <div className="error-container">
               {error.map((message, index) => (
@@ -71,7 +75,7 @@ export function ArtistForm() {
             listType="picture"
             maxCount={1}
           >
-            <Button icon={<UploadOutlined />}>Upload</Button>
+            <Button icon={<UploadOutlined />}>Upload Photo</Button>
           </Upload>
         </Form.Item>
         <Form.Item label={null}>

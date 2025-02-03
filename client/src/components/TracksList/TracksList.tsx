@@ -66,16 +66,16 @@ export function TracksList({ albumId }: Props) {
         <div className="tracks-list-container">
           <h1 className="tracks-list-title">Tracks</h1>
           <h2 className="tracks-artist-title">
-            {tracks.length ? tracks[0].album.artist.name : ''}
+            {tracks.length && !loading ? tracks[0].album.artist.name : ''}
           </h2>
           <h3 className="tracks-album-title">
-            {tracks.length ? tracks[0].album.name : ''}
+            {tracks.length && !loading ? tracks[0].album.name : ''}
           </h3>
           {loading && <Loader />}
           {data.length > 0 ? (
-            data.map((element) => (
+            data.map((element, index) => (
               <TrackItem
-                key={element.id}
+                key={index}
                 trackItem={element}
                 onClickTrack={() => onClickTrack(element.id)}
               />

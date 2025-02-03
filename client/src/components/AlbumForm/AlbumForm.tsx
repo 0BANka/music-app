@@ -20,7 +20,7 @@ export function AlbumForm() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { artists, artistsLoading } = useAppSelector((state) => state.artists);
-  const [error, setError] = useState([]);
+  const [error, setError] = useState<string[]>([]);
 
   useEffect(() => {
     if (!artists.length) {
@@ -32,8 +32,6 @@ export function AlbumForm() {
     const formData: FormData = new FormData();
     for (const name in values) {
       const value = values[name];
-
-      console.log(name, value);
 
       switch (name) {
         case 'artistId':
@@ -56,7 +54,11 @@ export function AlbumForm() {
       setError([]);
       router.push('/');
     } else {
-      setError(response);
+      if (!Array.isArray(response)) {
+        setError([response]);
+      } else {
+        setError(response);
+      }
     }
   };
 
@@ -69,7 +71,7 @@ export function AlbumForm() {
         name="album-create"
         className="create-form"
       >
-        {error.length > 0 && (
+        {error.length > 0 && Array.isArray(error) && (
           <>
             <div className="error-container">
               {error.map((message, index) => (
@@ -92,13 +94,19 @@ export function AlbumForm() {
         >
           <DatePicker picker="year" />
         </Form.Item>
-        <Form.Item name="artistId" label="Artist">
+        <Form.Item
+          name="artistId"
+          label="Artist"
+          rules={[{ required: true, message: 'You must select an artist!' }]}
+        >
           <Select loading={artistsLoading} placeholder="Please select artist">
-            {artists.map((artist) => (
-              <Select.Option key={artist.id} value={artist.id}>
-                {artist.name}
-              </Select.Option>
-            ))}
+            {Array.isArray(artists) &&
+              artists.length > 0 &&
+              artists.map((artist) => (
+                <Select.Option key={artist.id} value={artist.id}>
+                  {artist.name}
+                </Select.Option>
+              ))}
           </Select>
         </Form.Item>
         <Form.Item
@@ -112,7 +120,7 @@ export function AlbumForm() {
             listType="picture"
             maxCount={1}
           >
-            <Button icon={<UploadOutlined />}>Upload</Button>
+            <Button icon={<UploadOutlined />}>Upload Image</Button>
           </Upload>
         </Form.Item>
         <Form.Item label={null}>

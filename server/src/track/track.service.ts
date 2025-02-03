@@ -19,11 +19,11 @@ export class TrackService {
   ) {}
 
   durationFormate(duration: number) {
-    const seconds = Math.floor(duration || 0);
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
+    const totalSeconds = Math.floor(duration || 0);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
 
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   }
 
   async create(
@@ -47,13 +47,37 @@ export class TrackService {
       },
     });
 
-    if (createTrackDto.youtubeLink) {
+    if (
+      createTrackDto.youtubeLink &&
+      createTrackDto.youtubeLink !== undefined
+    ) {
       const formateYouTubeLink = this.extractYouTubeCode(
         createTrackDto.youtubeLink,
       );
 
       if (formateYouTubeLink) {
         createTrackDto.youtubeLink = formateYouTubeLink;
+      } else {
+        throw new BadRequestException(
+          'Invalid YouTube link. The link must be in the following format: https://www.youtube.com/watch?v=VIDEO_ID or https://youtu.be/VIDEO_ID?si=abcdefgh12345',
+        );
+      }
+    }
+
+    if (createTrackDto.duration) {
+      const durationRegex = /^\d{1,2}:\d{2}$/;
+
+      if (!durationRegex.test(createTrackDto.duration)) {
+        if (track?.filename) {
+          createTrackDto.duration = '';
+        } else {
+          throw new BadRequestException('Invalid duration');
+        }
+      } else {
+        const [minutes, seconds] = createTrackDto.duration
+          .split(':')
+          .map(Number);
+        createTrackDto.duration = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
       }
     }
 
@@ -62,13 +86,14 @@ export class TrackService {
         const pathAudio = path.join(pathToFiles, track.filename);
         const metadata = await parseFile(pathAudio);
 
-        if (metadata.format.duration) {
-          const duration = this.durationFormate(metadata.format.duration);
-          createTrackDto.duration = duration;
-        } else {
+        if (!metadata.format.duration) {
           throw new BadRequestException('Invalid duration');
         }
-      } catch {
+
+        createTrackDto.duration = this.durationFormate(
+          metadata.format.duration,
+        );
+      } catch (error) {
         throw new BadRequestException('Invalid file');
       }
     }

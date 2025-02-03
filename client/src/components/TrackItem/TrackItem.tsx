@@ -69,7 +69,7 @@ export function TrackItem({ trackItem, onClickTrack }: Props) {
               className="track-dropdown"
               placement="bottomLeft"
               menu={menuProps}
-              trigger={['hover']}
+              trigger={['hover', 'click']}
               disabled={!youtubeLink}
             >
               <EllipsisOutlined

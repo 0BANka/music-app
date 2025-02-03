@@ -28,21 +28,30 @@ export function AppToolbar() {
             </>
           ) : (
             <>
-              <span className="profile" title="My profile">
-                Hello, {user.username}!
-              </span>
-              <span className="logout" title="Logout" onClick={logoutHandler}>
-                Logout
-              </span>
-              <Link href="/tracks-history" className="menu-link">
-                History
-              </Link>
-              <Link href="/artists/add" className="menu-link">
-                Add artist
-              </Link>
-              <Link href="/albums/add" className="menu-link">
-                Add album
-              </Link>
+              <div className="menu-items">
+                <span className="profile" title="My profile">
+                  Hello, {user.username}!
+                </span>
+                <span className="logout" title="Logout" onClick={logoutHandler}>
+                  Logout
+                </span>
+              </div>
+              <div className="menu-items">
+                <Link href="/tracks-history" className="menu-link">
+                  History
+                </Link>
+              </div>
+              <div className="menu-items">
+                <Link href="/artists/add" className="menu-link">
+                  Add artist
+                </Link>
+                <Link href="/albums/add" className="menu-link">
+                  Add album
+                </Link>
+                <Link href="/tracks/add" className="menu-link">
+                  Add track
+                </Link>
+              </div>
             </>
           )}
         </ul>
