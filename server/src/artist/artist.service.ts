@@ -6,6 +6,7 @@ import { Artist } from './entities/artist.entity';
 import { User } from 'src/user/entities/user.entity';
 import { Album } from 'src/album/entities/album.entity';
 import { Track } from 'src/track/entities/track.entity';
+import { TrackHistory } from 'src/track-history/entities/track-history.entity';
 
 @Injectable()
 export class ArtistService {
@@ -21,6 +22,9 @@ export class ArtistService {
 
     @InjectRepository(User)
     private trackRepository: Repository<Track>,
+
+    @InjectRepository(TrackHistory)
+    private trackHistoryRepository: Repository<TrackHistory>,
   ) {}
 
   async create(
@@ -80,12 +84,25 @@ export class ArtistService {
 
     if (albums.length > 0) {
       const albumIds = albums.map((album) => album.id);
-      await this.trackRepository.delete({ albumId: In(albumIds) });
+
+      const tracks = await this.trackRepository.find({
+        where: { albumId: In(albumIds) },
+      });
+
+      if (tracks.length > 0) {
+        const trackIds = tracks.map((track) => track.id);
+
+        await this.trackHistoryRepository.delete({ track: In(trackIds) });
+
+        await this.trackRepository.delete({ albumId: In(albumIds) });
+      }
 
       await this.albumRepository.delete({ artistId: id });
     }
 
-    return await this.artistRepository.delete(id);
+    await this.artistRepository.delete(id);
+
+    return artist;
   }
 
   async publish(id: string) {

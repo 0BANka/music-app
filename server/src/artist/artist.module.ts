@@ -7,9 +7,12 @@ import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/entities/user.entity';
 import { Album } from 'src/album/entities/album.entity';
 import { Track } from 'src/track/entities/track.entity';
+import { TrackHistory } from 'src/track-history/entities/track-history.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Artist, User, Album, Track])],
+  imports: [
+    TypeOrmModule.forFeature([Artist, User, Album, Track, TrackHistory]),
+  ],
   controllers: [ArtistController],
   providers: [ArtistService, UserService],
 })

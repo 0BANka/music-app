@@ -2,10 +2,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { Album } from './entities/album.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Track } from 'src/track/entities/track.entity';
 import { User } from 'src/user/entities/user.entity';
 import { Artist } from 'src/artist/entities/artist.entity';
+import { TrackHistory } from 'src/track-history/entities/track-history.entity';
 
 @Injectable()
 export class AlbumService {
@@ -21,6 +22,9 @@ export class AlbumService {
 
     @InjectRepository(Artist)
     private artistRepository: Repository<Artist>,
+
+    @InjectRepository(TrackHistory)
+    private trackHistoryRepository: Repository<TrackHistory>,
   ) {}
 
   async create(
@@ -179,10 +183,16 @@ export class AlbumService {
     const tracks = await this.trackRepository.find({ where: { albumId: id } });
 
     if (tracks.length > 0) {
+      const trackIds = tracks.map((track) => track.id);
+
+      await this.trackHistoryRepository.delete({ track: In(trackIds) });
+
       await this.trackRepository.delete({ albumId: id });
     }
 
-    return await this.albumRepository.delete(id);
+    await this.albumRepository.delete(id);
+
+    return album;
   }
 
   async publish(id: string) {

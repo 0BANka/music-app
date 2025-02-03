@@ -16,6 +16,8 @@ import { CreateArtistDto } from './dto/create-artist.dto';
 import { storage } from '../storageConfig';
 import { AuthGuard } from 'src/user/auth.guard';
 import { RolesGuard } from 'src/role/roles.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/role/enums/role.enum';
 
 @Controller('artists')
 export class ArtistController {
@@ -42,15 +44,17 @@ export class ArtistController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard)
+  @Roles(Role.ADMIN)
   @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   remove(@Param('id') id: string) {
     return this.artistService.remove(id);
   }
 
   @Post(':id/publish')
-  @UseGuards(AuthGuard)
+  @Roles(Role.ADMIN)
   @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   publish(@Param('id') id: string) {
     return this.artistService.publish(id);
   }
