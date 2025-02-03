@@ -44,12 +44,7 @@ export class ArtistService {
 
     const artistsProcessed = artists.map((artist) => {
       return {
-        id: artist.id,
-        name: artist.name,
-        info: artist.info,
-        photo: artist.photo,
-        user: artist.user,
-        isPublish: artist.isPublish,
+        ...artist,
         createdByMe: currentUser
           ? String(artist.user) === String(currentUser.id)
           : false,

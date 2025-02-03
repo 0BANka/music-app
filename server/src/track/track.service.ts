@@ -6,12 +6,16 @@ import { pathToFiles } from 'src/storageConfig';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { Track } from './entities/track.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class TrackService {
   constructor(
     @InjectRepository(Track)
     private trackRepository: Repository<Track>,
+
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
   ) {}
 
   durationFormate(duration: number) {
@@ -22,7 +26,11 @@ export class TrackService {
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   }
 
-  async create(createTrackDto: CreateTrackDto, track?: Express.Multer.File) {
+  async create(
+    createTrackDto: CreateTrackDto,
+    token: string,
+    track?: Express.Multer.File,
+  ) {
     const uniqueNumber = await this.trackRepository.find({
       where: {
         albumId: createTrackDto.albumId,
@@ -32,6 +40,12 @@ export class TrackService {
     if (uniqueNumber.length > 0) {
       throw new BadRequestException('Duplicate track number');
     }
+
+    const user = await this.usersRepository.findOne({
+      where: {
+        token,
+      },
+    });
 
     if (createTrackDto.youtubeLink) {
       const formateYouTubeLink = this.extractYouTubeCode(
@@ -61,6 +75,7 @@ export class TrackService {
 
     return await this.trackRepository.save({
       ...createTrackDto,
+      user: String(user.id),
       youtubeLink: createTrackDto.youtubeLink || '',
       track: track?.filename || '',
     });
@@ -83,38 +98,35 @@ export class TrackService {
     return null;
   }
 
-  async findAll(album?: string, artist?: string): Promise<Track[]> {
+  async findAll(token?: string, album?: string, artist?: string) {
+    const currentUser = token
+      ? await this.usersRepository.findOne({ where: { token } })
+      : null;
+
+    const whereCondition: {
+      albumId?: string;
+      album?: { artist: { id: string } };
+    } = {};
+
     if (album) {
-      return this.trackRepository.find({
-        where: { albumId: album },
-        relations: {
-          album: {
-            artist: true,
-          },
-        },
-        order: { trackNumber: 'ASC' },
-      });
+      whereCondition.albumId = album;
     } else if (artist) {
-      return this.trackRepository.find({
-        where: {
-          album: {
-            artist: {
-              id: artist,
-            },
-          },
-        },
-        relations: {
-          album: {
-            artist: true,
-          },
-        },
-        order: { trackNumber: 'ASC' },
-      });
-    } else {
-      return this.trackRepository.find({
-        relations: { album: true },
-        order: { trackNumber: 'ASC' },
-      });
+      whereCondition.album = { artist: { id: artist } };
     }
+
+    const tracks = await this.trackRepository.find({
+      where: whereCondition,
+      relations: { album: { artist: true } },
+      order: { trackNumber: 'ASC' },
+    });
+
+    const tracksProcessed = tracks.map((track) => ({
+      ...track,
+      createdByMe: currentUser
+        ? String(track.user) === String(currentUser.id)
+        : false,
+    }));
+
+    return tracksProcessed;
   }
 }
