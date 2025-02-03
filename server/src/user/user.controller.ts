@@ -7,10 +7,14 @@ import {
   Delete,
   Headers,
   UseGuards,
+  Get,
 } from '@nestjs/common';
 import { RegisterSignUserDto } from './dto/register-sign-user.dto';
 import { UserService } from './user.service';
 import { AuthGuard } from './auth.guard';
+import { RolesGuard } from 'src/role/roles.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/role/enums/role.enum';
 
 @Controller('users')
 export class UserController {
