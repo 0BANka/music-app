@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Track } from 'src/track/entities/track.entity';
 import { User } from 'src/user/entities/user.entity';
+import { Artist } from 'src/artist/entities/artist.entity';
 
 @Injectable()
 export class AlbumService {
@@ -17,6 +18,9 @@ export class AlbumService {
 
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+
+    @InjectRepository(Artist)
+    private artistRepository: Repository<Artist>,
   ) {}
 
   async create(
@@ -72,6 +76,23 @@ export class AlbumService {
         );
 
         return albumsWithTracks;
+      } else {
+        const artist = await this.artistRepository.findOne({
+          where: { id: String(id) },
+          select: { name: true },
+        });
+
+        if (artist) {
+          return [
+            {
+              artist: {
+                name: artist.name,
+              },
+            },
+          ];
+        } else {
+          return [];
+        }
       }
     } else {
       const albums = await this.albumRepository.find({

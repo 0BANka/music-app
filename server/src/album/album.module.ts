@@ -6,9 +6,10 @@ import { Album } from './entities/album.entity';
 import { Track } from 'src/track/entities/track.entity';
 import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
+import { Artist } from 'src/artist/entities/artist.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Album, Track, User])],
+  imports: [TypeOrmModule.forFeature([Album, Track, User, Artist])],
   controllers: [AlbumController],
   providers: [AlbumService, UserService],
 })
