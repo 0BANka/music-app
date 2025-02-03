@@ -10,7 +10,6 @@ interface State {
 
 export interface HistoryTrackRequest {
   track: string;
-  token: string;
 }
 
 const initialState: State = {
@@ -20,24 +19,19 @@ const initialState: State = {
 
 export const addTrackHistory = createAsyncThunk(
   'track/addHistory',
-  async (trackRequest: HistoryTrackRequest) => {
-    const { data } = await axiosApiClient.post(
-      `/track_history`,
-      {
-        track: String(trackRequest.track),
-      },
-      { headers: { Authorization: `${trackRequest.token}` } },
-    );
+  async (track: string) => {
+    const { data } = await axiosApiClient.post(`/track_history`, {
+      track: String(track),
+    });
     return data;
   },
 );
 
 export const fetchTracksHistory = createAsyncThunk(
   'track/fetchHistory',
-  async (token: string) => {
+  async () => {
     const { data } = await axiosApiClient.get<ITrackHistory[]>(
       `/track_history`,
-      { headers: { Authorization: `${token}` } },
     );
     return data;
   },

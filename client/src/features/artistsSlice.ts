@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { axiosApiClient } from '@/helpers/axiosApiClient';
 import { IArtist } from '@/interfaces/IArtist';
+import { AxiosError } from 'axios';
 
 interface State {
   artists: IArtist[];
@@ -18,6 +19,21 @@ export const fetchArtists = createAsyncThunk('fetch/artists', async () => {
   return data;
 });
 
+export const createArtist = createAsyncThunk(
+  'create/artists',
+  async (payload: FormData) => {
+    try {
+      const { data } = await axiosApiClient.post('/artists', payload);
+      return data;
+    } catch (e) {
+      const error = e as AxiosError<{ error: string; message: [string] }>;
+      if (error.response?.data?.error) {
+        return error.response.data.message;
+      }
+    }
+  },
+);
+
 const artistsSlice = createSlice({
   name: 'artists',
   initialState,
@@ -29,6 +45,13 @@ const artistsSlice = createSlice({
       })
       .addCase(fetchArtists.fulfilled, (state, action) => {
         state.artists = action.payload;
+        state.loading = false;
+      })
+      .addCase(createArtist.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createArtist.fulfilled, (state, action) => {
+        state.artists = [...state.artists, action.payload];
         state.loading = false;
       });
   },

@@ -27,10 +27,12 @@ export const withAuth = (WrappedComponent: ElementType, role: Role) => {
       <WrappedComponent {...props} />
     ) : (
       <>
-        <Alert
-          message="У вас нет доступа к данной странице. Обратитесь к администратору системы"
-          type="warning"
-        />
+        <div className="container">
+          <Alert
+            message="У вас нет доступа к данной странице. Обратитесь к администратору системы"
+            type="warning"
+          />
+        </div>
       </>
     );
   };

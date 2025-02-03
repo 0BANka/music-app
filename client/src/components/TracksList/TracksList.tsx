@@ -3,10 +3,7 @@ import { message } from 'antd';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { ITrack } from '@/interfaces/ITrack';
 import { fetchTracks } from '@/features/tracksSlice';
-import {
-  addTrackHistory,
-  HistoryTrackRequest,
-} from '@/features/tracksHistorySlice';
+import { addTrackHistory } from '@/features/tracksHistorySlice';
 import { TrackItem } from '../TrackItem/TrackItem';
 import { Loader } from '../Loader/Loader';
 
@@ -55,12 +52,7 @@ export function TracksList({ albumId }: Props) {
       return;
     }
 
-    const track: HistoryTrackRequest = {
-      track: trackId,
-      token: user.token,
-    };
-
-    const result = await dispatch(addTrackHistory(track));
+    const result = await dispatch(addTrackHistory(trackId));
 
     if (result.payload) {
       displaySuccess();

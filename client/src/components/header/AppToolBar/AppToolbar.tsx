@@ -31,12 +31,15 @@ export function AppToolbar() {
               <span className="profile" title="My profile">
                 Hello, {user.username}!
               </span>
-              <Link href="/tracks-history" className="history-link">
-                History
-              </Link>
               <span className="logout" title="Logout" onClick={logoutHandler}>
                 Logout
               </span>
+              <Link href="/tracks-history" className="menu-link">
+                History
+              </Link>
+              <Link href="/artists/add" className="menu-link">
+                Add artist
+              </Link>
             </>
           )}
         </ul>
