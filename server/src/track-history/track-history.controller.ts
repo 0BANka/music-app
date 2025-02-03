@@ -3,7 +3,6 @@ import {
   Post,
   Body,
   Headers,
-  UnauthorizedException,
   Get,
   UseGuards,
 } from '@nestjs/common';

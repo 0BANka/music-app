@@ -54,7 +54,7 @@ export class TrackService {
         } else {
           throw new BadRequestException('Invalid duration');
         }
-      } catch (e) {
+      } catch {
         throw new BadRequestException('Invalid file');
       }
     }

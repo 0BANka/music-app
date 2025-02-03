@@ -28,6 +28,9 @@ export class Track {
   @Column()
   duration: string;
 
+  @Column({ default: 0 })
+  isPublish: boolean;
+
   @Column({ nullable: true })
   youtubeLink?: string;
 

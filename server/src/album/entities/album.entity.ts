@@ -25,6 +25,9 @@ export class Album {
   @Column()
   year: string;
 
+  @Column({ default: 0 })
+  isPublish: boolean;
+
   @Column({ nullable: true })
   image?: string;
 }

@@ -11,6 +11,9 @@ export class Artist {
   @Column()
   info: string;
 
+  @Column({ default: 0 })
+  isPublish: boolean;
+
   @Column({ nullable: true })
   photo?: string;
 }
