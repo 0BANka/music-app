@@ -30,11 +30,14 @@ export class AlbumService {
       },
     });
 
-    return await this.albumRepository.save({
+    const album = await this.albumRepository.save({
       ...createAlbumDto,
       image: image?.filename || 'no-photo-available.png',
       user: String(user.id),
     });
+
+    const createdAlbum = await this.findOne(album.id, token);
+    return createdAlbum;
   }
 
   async findAll(id?: string, token?: string) {

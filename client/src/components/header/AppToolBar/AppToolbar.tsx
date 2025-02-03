@@ -40,6 +40,9 @@ export function AppToolbar() {
               <Link href="/artists/add" className="menu-link">
                 Add artist
               </Link>
+              <Link href="/albums/add" className="menu-link">
+                Add album
+              </Link>
             </>
           )}
         </ul>

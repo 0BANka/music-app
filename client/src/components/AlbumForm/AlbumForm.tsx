@@ -1,26 +1,58 @@
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { Alert, Button, Flex, Form, Input, Space, Upload } from 'antd';
+import { useEffect, useState } from 'react';
+import {
+  Alert,
+  Button,
+  DatePicker,
+  Flex,
+  Form,
+  Input,
+  Select,
+  Space,
+  Upload,
+} from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { useAppDispatch } from '@/store/hooks';
-import { createArtist } from '@/features/artistsSlice';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { createAlbum } from '@/features/albumsSlice';
+import { fetchArtists } from '@/features/artistsSlice';
 
 import './AlbumForm.sass';
 
 export function AlbumForm() {
   const dispatch = useAppDispatch();
-  const [error, setError] = useState([]);
   const router = useRouter();
+  const { artists, loading } = useAppSelector((state) => state.artists);
+  const [error, setError] = useState([]);
+
+  useEffect(() => {
+    if (!artists.length) {
+      dispatch(fetchArtists());
+    }
+  }, [dispatch, artists.length]);
 
   const onFinish = async (values: { [key: string]: string }) => {
     const formData: FormData = new FormData();
     for (const name in values) {
       const value = values[name];
 
-      formData.append(name, name === 'photo' ? value : value.trim());
+      console.log(name, value);
+
+      switch (name) {
+        case 'artistId':
+          formData.append(name, String(value));
+          break;
+        case 'image':
+          formData.append(name, value);
+          break;
+        case 'year':
+          formData.append(name, new Date(value).getFullYear().toString());
+          break;
+        default:
+          formData.append(name, value.trim());
+      }
     }
 
-    const response = await dispatch(createArtist(formData)).unwrap();
+    const response = await dispatch(createAlbum(formData)).unwrap();
 
     if (response.id) {
       setError([]);
@@ -36,8 +68,8 @@ export function AlbumForm() {
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 18 }}
         onFinish={onFinish}
-        name="artist-create"
-        className="artist-create-form"
+        name="album-create"
+        className="create-form"
       >
         {error.length > 0 && (
           <>
@@ -51,25 +83,34 @@ export function AlbumForm() {
         <Form.Item
           name="name"
           label="Name"
-          rules={[{ required: true, message: 'Please input artist name!' }]}
+          rules={[{ required: true, message: 'Please input album name!' }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          name="info"
-          label="Info"
-          rules={[{ required: true, message: 'Please input artist info!' }]}
+          name="year"
+          label="Year"
+          rules={[{ required: true, message: 'Please input album year!' }]}
         >
-          <Input.TextArea />
+          <DatePicker picker="year" />
+        </Form.Item>
+        <Form.Item name="artistId" label="Artist">
+          <Select loading={loading} placeholder="Please select artist">
+            {artists.map((artist) => (
+              <Select.Option key={artist.id} value={artist.id}>
+                {artist.name}
+              </Select.Option>
+            ))}
+          </Select>
         </Form.Item>
         <Form.Item
-          name="photo"
-          label="Photo"
+          name="image"
+          label="Image"
           getValueFromEvent={({ file }) => file.originFileObj}
         >
           <Upload
             accept="image/png, image/jpeg, image/gif"
-            name="photo"
+            name="image"
             listType="picture"
             maxCount={1}
           >

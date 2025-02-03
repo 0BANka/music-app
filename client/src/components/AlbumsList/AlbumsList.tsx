@@ -33,11 +33,13 @@ export function AlbumsList({ artistId }: Props) {
       <div className="albums-list-container">
         <h1 className="albums-list-title">Albums</h1>
         <h2 className="albums-artist-title">
-          {albums.length ? albums[0].artist.name : ''}
+          {albums.length && !loading ? albums[0].artist.name : ''}
         </h2>
         {loading && <Loader />}
-        {data.length > 0 ? (
-          data.map((element) => <AlbumItem key={element.id} album={element} />)
+        {data.length > 0 && !loading ? (
+          data.map((element, index) => (
+            <AlbumItem key={index} album={element} />
+          ))
         ) : (
           <>
             <h3>No albums found.</h3>

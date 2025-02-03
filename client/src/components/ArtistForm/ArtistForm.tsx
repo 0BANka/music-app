@@ -5,12 +5,10 @@ import { UploadOutlined } from '@ant-design/icons';
 import { useAppDispatch } from '@/store/hooks';
 import { createArtist } from '@/features/artistsSlice';
 
-import './ArtistForm.sass';
-
 export function ArtistForm() {
   const dispatch = useAppDispatch();
-  const [error, setError] = useState([]);
   const router = useRouter();
+  const [error, setError] = useState([]);
 
   const onFinish = async (values: { [key: string]: string }) => {
     const formData: FormData = new FormData();
@@ -37,7 +35,7 @@ export function ArtistForm() {
         wrapperCol={{ span: 18 }}
         onFinish={onFinish}
         name="artist-create"
-        className="artist-create-form"
+        className="create-form"
       >
         {error.length > 0 && (
           <>
