@@ -10,6 +10,7 @@ import {
   HttpStatus,
   Query,
   UseGuards,
+  Headers,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
@@ -25,20 +26,31 @@ export class AlbumController {
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('image', storage))
   async create(
+    @Headers() headers: { authorization: string },
     @Body() createAlbumDto: CreateAlbumDto,
     @UploadedFile() image: Express.Multer.File,
   ) {
-    return this.albumService.create(createAlbumDto, image);
+    return this.albumService.create(
+      createAlbumDto,
+      headers.authorization,
+      image,
+    );
   }
 
   @Get()
-  findAll(@Query('artist') artist?: string) {
-    return this.albumService.findAll(artist);
+  findAll(
+    @Headers() headers: { authorization: string },
+    @Query('artist') artist?: string,
+  ) {
+    return this.albumService.findAll(artist, headers.authorization);
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    const album = await this.albumService.findOne(id);
+  async findOne(
+    @Headers() headers: { authorization: string },
+    @Param('id') id: string,
+  ) {
+    const album = await this.albumService.findOne(id, headers.authorization);
     if (!album) {
       throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
     }

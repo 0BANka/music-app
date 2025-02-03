@@ -33,7 +33,7 @@ export class ArtistService {
     });
   }
 
-  async findAll(token: string) {
+  async findAll(token?: string) {
     const currentUser = token
       ? await this.usersRepository.findOne({
           where: { token },
@@ -50,7 +50,7 @@ export class ArtistService {
         photo: artist.photo,
         user: artist.user,
         isPublish: artist.isPublish,
-        isMyPost: currentUser
+        createdByMe: currentUser
           ? String(artist.user) === String(currentUser.id)
           : false,
       };
