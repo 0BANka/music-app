@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { axiosApiClient } from '@/helpers/axiosApiClient';
 import { ITrack } from '@/interfaces/ITrack';
+import { AxiosError } from 'axios';
 
 interface State {
   tracks: ITrack[];
@@ -25,6 +26,21 @@ export const fetchTracks = createAsyncThunk(
   },
 );
 
+export const createTrack = createAsyncThunk(
+  'create/track',
+  async (payload: FormData) => {
+    try {
+      const { data } = await axiosApiClient.post('/tracks', payload);
+      return data;
+    } catch (e) {
+      const error = e as AxiosError<{ error: string; message: [string] }>;
+      if (error.response?.data?.error) {
+        return error.response.data.message;
+      }
+    }
+  },
+);
+
 const tracksSlice = createSlice({
   name: 'tracks',
   initialState,
@@ -40,6 +56,13 @@ const tracksSlice = createSlice({
       })
       .addCase(fetchTracks.fulfilled, (state, action) => {
         state.tracks = action.payload;
+        state.loading = false;
+      })
+      .addCase(createTrack.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createTrack.fulfilled, (state, action) => {
+        state.tracks = [...state.tracks, action.payload];
         state.loading = false;
       });
   },

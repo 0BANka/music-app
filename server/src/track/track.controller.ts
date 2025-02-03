@@ -9,6 +9,7 @@ import {
   UseInterceptors,
   UploadedFile,
   UseGuards,
+  Headers,
 } from '@nestjs/common';
 import { storage } from 'src/storageConfig';
 import { TrackService } from './track.service';
@@ -24,14 +25,23 @@ export class TrackController {
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('track', storage))
   async create(
+    @Headers() headers: { authorization: string },
     @Body() createTrackDto: CreateTrackDto,
     @UploadedFile() track: Express.Multer.File,
   ) {
-    return this.trackService.create(createTrackDto, track);
+    return this.trackService.create(
+      createTrackDto,
+      headers.authorization,
+      track,
+    );
   }
 
   @Get()
-  findAll(@Query('album') album?: string, @Query('artist') artist?: string) {
+  findAll(
+    @Headers() headers: { authorization: string },
+    @Query('album') album?: string,
+    @Query('artist') artist?: string,
+  ) {
     if (album && artist) {
       throw new HttpException(
         'Можно указать только один параметр: либо альбом, либо исполнителя',
@@ -39,6 +49,6 @@ export class TrackController {
       );
     }
 
-    return this.trackService.findAll(album, artist);
+    return this.trackService.findAll(headers.authorization, album, artist);
   }
 }

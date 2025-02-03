@@ -8,4 +8,6 @@ export interface IAlbum {
     id: string;
     name: string;
   };
+  isPublish?: boolean;
+  createdByMe?: boolean;
 }

@@ -24,12 +24,9 @@ interface UserResponseError {
 
 export const logoutUser = createAsyncThunk(
   'user/logout',
-  async (_, { rejectWithValue, getState }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const token = (getState() as { user: UserState })?.user?.user?.token;
-      const { data } = await axiosApiClient.delete('users/logout', {
-        headers: { Authorization: token },
-      });
+      const { data } = await axiosApiClient.delete('users/logout');
       return data;
     } catch (err) {
       if (err instanceof AxiosError) {

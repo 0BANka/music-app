@@ -36,7 +36,7 @@ export function AlbumItem({ album }: Props) {
             <p className="album-date">{year} year</p>
             <p className="album-tracks">{numberOfTracks} tracks</p>
             <Link
-              href={`/artists/${artist.id}/albums/${id}`}
+              href={`/artists/${artist?.id}/albums/${id}`}
               className="open-album-btn"
             >
               Open album &gt;&gt;

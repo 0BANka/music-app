@@ -19,6 +19,8 @@ export const albumFactory = setSeederFactory(Album, async () => {
     .getFullYear()
     .toString();
   album.image = faker.image.urlPicsumPhotos();
+  album.isPublish = true;
+  album.user = String(faker.number.int({ min: 1, max: 2 }));
 
   return album;
 });

@@ -11,6 +11,7 @@ import {
   REHYDRATE,
 } from 'redux-persist';
 import { rootReducer } from './rootReducer';
+import { injectStore } from '@/helpers/axiosApiClient';
 
 const persistConfig = {
   key: 'root',
@@ -33,6 +34,8 @@ const store = configureStore({
     });
   },
 });
+
+injectStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

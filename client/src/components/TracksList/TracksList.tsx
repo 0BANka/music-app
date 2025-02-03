@@ -3,10 +3,7 @@ import { message } from 'antd';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { ITrack } from '@/interfaces/ITrack';
 import { fetchTracks } from '@/features/tracksSlice';
-import {
-  addTrackHistory,
-  HistoryTrackRequest,
-} from '@/features/tracksHistorySlice';
+import { addTrackHistory } from '@/features/tracksHistorySlice';
 import { TrackItem } from '../TrackItem/TrackItem';
 import { Loader } from '../Loader/Loader';
 
@@ -55,12 +52,7 @@ export function TracksList({ albumId }: Props) {
       return;
     }
 
-    const track: HistoryTrackRequest = {
-      track: trackId,
-      token: user.token,
-    };
-
-    const result = await dispatch(addTrackHistory(track));
+    const result = await dispatch(addTrackHistory(trackId));
 
     if (result.payload) {
       displaySuccess();
@@ -74,16 +66,16 @@ export function TracksList({ albumId }: Props) {
         <div className="tracks-list-container">
           <h1 className="tracks-list-title">Tracks</h1>
           <h2 className="tracks-artist-title">
-            {tracks.length ? tracks[0].album.artist.name : ''}
+            {tracks.length && !loading ? tracks[0].album.artist.name : ''}
           </h2>
           <h3 className="tracks-album-title">
-            {tracks.length ? tracks[0].album.name : ''}
+            {tracks.length && !loading ? tracks[0].album.name : ''}
           </h3>
           {loading && <Loader />}
           {data.length > 0 ? (
-            data.map((element) => (
+            data.map((element, index) => (
               <TrackItem
-                key={element.id}
+                key={index}
                 trackItem={element}
                 onClickTrack={() => onClickTrack(element.id)}
               />

@@ -3,4 +3,10 @@ export interface IUser {
   username: string;
   password: string;
   token?: string;
+  role: Role;
+}
+
+export enum Role {
+  USER = 'user',
+  ADMIN = 'admin',
 }

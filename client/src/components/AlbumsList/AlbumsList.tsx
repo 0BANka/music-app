@@ -13,7 +13,7 @@ interface Props {
 
 export function AlbumsList({ artistId }: Props) {
   const dispatch = useAppDispatch();
-  const { albums, loading } = useAppSelector((state) => state.albums);
+  const { albums, albumsLoading } = useAppSelector((state) => state.albums);
   const [data, setData] = useState<IAlbum[]>([]);
 
   useEffect(() => {
@@ -33,11 +33,13 @@ export function AlbumsList({ artistId }: Props) {
       <div className="albums-list-container">
         <h1 className="albums-list-title">Albums</h1>
         <h2 className="albums-artist-title">
-          {albums.length ? albums[0].artist.name : ''}
+          {albums.length && !albumsLoading ? albums[0].artist.name : ''}
         </h2>
-        {loading && <Loader />}
-        {data.length > 0 ? (
-          data.map((element) => <AlbumItem key={element.id} album={element} />)
+        {albumsLoading && <Loader />}
+        {data.length > 0 && !albumsLoading ? (
+          data.map((element, index) => (
+            <AlbumItem key={index} album={element} />
+          ))
         ) : (
           <>
             <h3>No albums found.</h3>

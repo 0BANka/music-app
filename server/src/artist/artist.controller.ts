@@ -6,6 +6,7 @@ import {
   UseInterceptors,
   UploadedFile,
   UseGuards,
+  Headers,
 } from '@nestjs/common';
 import { ArtistService } from './artist.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
@@ -21,14 +22,19 @@ export class ArtistController {
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('photo', storage))
   async create(
+    @Headers() headers: { authorization: string },
     @Body() createArtistDto: CreateArtistDto,
     @UploadedFile() photo: Express.Multer.File,
   ) {
-    return this.artistService.create(createArtistDto, photo);
+    return this.artistService.create(
+      createArtistDto,
+      headers.authorization,
+      photo,
+    );
   }
 
   @Get()
-  findAll() {
-    return this.artistService.findAll();
+  findAll(@Headers() headers: { authorization: string }) {
+    return this.artistService.findAll(headers.authorization);
   }
 }

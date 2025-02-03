@@ -1,15 +1,18 @@
 'use client';
 
-import { useAppSelector } from '@/store/hooks';
 import { redirect } from 'next/navigation';
 import { ElementType, useEffect } from 'react';
+import { Alert } from 'antd';
+import { useAppSelector } from '@/store/hooks';
+import { Loader } from '@/components/Loader/Loader';
+import { Role } from '@/interfaces/IUser';
 
-export const withAuth = (WrappedComponent: ElementType) => {
+export const withAuth = (WrappedComponent: ElementType, role: Role) => {
   return function WithAuth(props: object) {
-    const { user } = useAppSelector((state) => state.user);
+    const { user, loading } = useAppSelector((state) => state.user);
 
     useEffect(() => {
-      if (!user) {
+      if (!user && !loading) {
         redirect('/login');
       }
     });
@@ -18,6 +21,19 @@ export const withAuth = (WrappedComponent: ElementType) => {
       return null;
     }
 
-    return <WrappedComponent {...props} />;
+    return loading ? (
+      <Loader />
+    ) : role === user?.role ? (
+      <WrappedComponent {...props} />
+    ) : (
+      <>
+        <div className="container">
+          <Alert
+            message="У вас нет доступа к данной странице. Обратитесь к администратору системы"
+            type="warning"
+          />
+        </div>
+      </>
+    );
   };
 };

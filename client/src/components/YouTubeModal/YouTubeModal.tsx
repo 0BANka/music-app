@@ -22,28 +22,26 @@ export function YouTubeModal({ youtubeLink }: Props) {
   };
 
   return (
-    <>
-      <Modal
-        className="youtube-modal"
-        title="Play on YouTube"
-        open={youtubeModal}
-        onCancel={handleOk}
-        footer={
-          <Button type="default" onClick={handleOk}>
-            Close
-          </Button>
-        }
-      >
-        {loading && <Loader />}
-        <iframe
-          src={`https://www.youtube.com/embed/${youtubeLink}`}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className="youtube-iframe"
-          onLoad={handleIframeLoad}
-          style={loading ? { display: 'none' } : {}}
-        ></iframe>
-      </Modal>
-    </>
+    <Modal
+      className="youtube-modal"
+      title="Play on YouTube"
+      open={youtubeModal}
+      onCancel={handleOk}
+      footer={
+        <Button type="default" onClick={handleOk}>
+          Close
+        </Button>
+      }
+    >
+      {loading && <Loader />}
+      <iframe
+        src={`https://www.youtube.com/embed/${youtubeLink}`}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+        className="youtube-iframe"
+        onLoad={handleIframeLoad}
+        style={loading ? { display: 'none' } : {}}
+      ></iframe>
+    </Modal>
   );
 }

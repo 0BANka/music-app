@@ -22,6 +22,8 @@ export const trackFactory = setSeederFactory(Track, async () => {
   track.duration = trackMinutes + ':' + trackSeconds;
   track.youtubeLink = '';
   track.track = '';
+  track.isPublish = true;
+  track.user = String(faker.number.int({ min: 1, max: 2 }));
 
   return track;
 });

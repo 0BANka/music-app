@@ -15,7 +15,7 @@ export function TracksHistoryList() {
 
   useEffect(() => {
     if (user?.token) {
-      dispatch(fetchTracksHistory(user.token));
+      dispatch(fetchTracksHistory());
     }
   }, [dispatch, user?.token]);
 

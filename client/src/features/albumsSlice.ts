@@ -1,15 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { AxiosError } from 'axios';
 import { axiosApiClient } from '@/helpers/axiosApiClient';
 import { IAlbum } from '@/interfaces/IAlbum';
 
 interface State {
   albums: IAlbum[];
   error?: Error;
-  loading: boolean;
+  albumsLoading: boolean;
 }
 
 const initialState: State = {
-  loading: false,
+  albumsLoading: false,
   albums: [],
 };
 
@@ -23,6 +24,21 @@ export const fetchAlbums = createAsyncThunk(
   },
 );
 
+export const createAlbum = createAsyncThunk(
+  'create/album',
+  async (payload: FormData) => {
+    try {
+      const { data } = await axiosApiClient.post('/albums', payload);
+      return data;
+    } catch (e) {
+      const error = e as AxiosError<{ error: string; message: [string] }>;
+      if (error.response?.data?.error) {
+        return error.response.data.message;
+      }
+    }
+  },
+);
+
 const albumsSlice = createSlice({
   name: 'albums',
   initialState,
@@ -30,11 +46,18 @@ const albumsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchAlbums.pending, (state) => {
-        state.loading = true;
+        state.albumsLoading = true;
       })
       .addCase(fetchAlbums.fulfilled, (state, action) => {
         state.albums = action.payload;
-        state.loading = false;
+        state.albumsLoading = false;
+      })
+      .addCase(createAlbum.pending, (state) => {
+        state.albumsLoading = true;
+      })
+      .addCase(createAlbum.fulfilled, (state, action) => {
+        state.albums = [...state.albums, action.payload];
+        state.albumsLoading = false;
       });
   },
 });

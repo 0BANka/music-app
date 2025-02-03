@@ -4,10 +4,7 @@ import { Album } from './entities/album.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Track } from 'src/track/entities/track.entity';
-
-export interface AlbumWithNumberOfTracks extends Album {
-  numberOfTracks?: number;
-}
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class AlbumService {
@@ -17,16 +14,39 @@ export class AlbumService {
 
     @InjectRepository(Track)
     private trackRepository: Repository<Track>,
+
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
   ) {}
 
-  async create(createAlbumDto: CreateAlbumDto, image?: Express.Multer.File) {
-    return await this.albumRepository.save({
+  async create(
+    createAlbumDto: CreateAlbumDto,
+    token: string,
+    image?: Express.Multer.File,
+  ) {
+    const user = await this.usersRepository.findOne({
+      where: {
+        token,
+      },
+    });
+
+    const album = await this.albumRepository.save({
       ...createAlbumDto,
       image: image?.filename || 'no-photo-available.png',
+      user: String(user.id),
     });
+
+    const createdAlbum = await this.findOne(album.id, token);
+    return createdAlbum;
   }
 
-  async findAll(id?: string): Promise<AlbumWithNumberOfTracks[]> {
+  async findAll(id?: string, token?: string) {
+    const currentUser = token
+      ? await this.usersRepository.findOne({
+          where: { token },
+        })
+      : null;
+
     if (id) {
       const albums = await this.albumRepository.find({
         where: { artistId: id },
@@ -44,6 +64,9 @@ export class AlbumService {
             return {
               ...album,
               numberOfTracks: tracksCount,
+              createdByMe: currentUser
+                ? String(album.user) === String(currentUser.id)
+                : false,
             };
           }),
         );
@@ -66,6 +89,9 @@ export class AlbumService {
             return {
               ...album,
               numberOfTracks: tracksCount,
+              createdByMe: currentUser
+                ? String(album.user) === String(currentUser.id)
+                : false,
             };
           }),
         );
@@ -75,10 +101,23 @@ export class AlbumService {
     }
   }
 
-  async findOne(id: string): Promise<Album> {
-    return this.albumRepository.findOne({
+  async findOne(id: string, token?: string) {
+    const currentUser = token
+      ? await this.usersRepository.findOne({
+          where: { token },
+        })
+      : null;
+
+    const album = await this.albumRepository.findOne({
       where: { id },
       relations: { artist: true },
     });
+
+    return {
+      ...album,
+      createdByMe: currentUser
+        ? String(album.user) === String(currentUser.id)
+        : false,
+    };
   }
 }

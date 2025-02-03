@@ -13,9 +13,6 @@ export default class UserSeeder implements Seeder {
     await dataSource.query('TRUNCATE TABLE `user`;');
     await dataSource.query('SET foreign_key_checks = 1;');
 
-    const userFactory = factoryManager.get(User);
-    await userFactory.save();
-
     const userRepo = dataSource.getRepository(User);
 
     const adminUser = new User();
@@ -24,5 +21,8 @@ export default class UserSeeder implements Seeder {
     adminUser.role = Role.ADMIN;
 
     await userRepo.save(adminUser);
+
+    const userFactory = factoryManager.get(User);
+    await userFactory.save();
   }
 }

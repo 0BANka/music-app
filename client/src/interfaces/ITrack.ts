@@ -13,4 +13,6 @@ export interface ITrack {
   };
   youtubeLink?: string;
   track?: string;
+  isPublish?: boolean;
+  createdByMe?: boolean;
 }
