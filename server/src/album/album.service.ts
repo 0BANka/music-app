@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { Album } from './entities/album.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -167,5 +167,31 @@ export class AlbumService {
         ? String(album.user) === String(currentUser.id)
         : false,
     };
+  }
+
+  async remove(id: string) {
+    const album = await this.albumRepository.findOne({ where: { id } });
+
+    if (!album) {
+      throw new NotFoundException('Album not found');
+    }
+
+    const tracks = await this.trackRepository.find({ where: { albumId: id } });
+
+    if (tracks.length > 0) {
+      await this.trackRepository.delete({ albumId: id });
+    }
+
+    return await this.albumRepository.delete(id);
+  }
+
+  async publish(id: string) {
+    const album = await this.albumRepository.findOne({ where: { id } });
+
+    if (!album) {
+      throw new NotFoundException('Album not found');
+    }
+
+    return await this.albumRepository.update(id, { isPublish: true });
   }
 }
