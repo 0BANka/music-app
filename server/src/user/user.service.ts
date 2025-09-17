@@ -5,25 +5,21 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import * as argon2 from 'argon2';
 import * as _ from 'lodash';
 import { User } from './entities/user.entity';
 import { RegisterSignUserDto } from './dto/register-sign-user.dto';
 
 @Injectable()
 export class UserService {
-  private saltRounds = 10;
-
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
 
   async register(registerSignUserDto: RegisterSignUserDto) {
-    const salt = await bcrypt.genSalt(this.saltRounds);
-    registerSignUserDto.password = await bcrypt.hash(
+    registerSignUserDto.password = await argon2.hash(
       registerSignUserDto.password,
-      salt,
     );
     await this.usersRepository.save(registerSignUserDto);
 
@@ -44,9 +40,9 @@ export class UserService {
     if (!user) {
       throw new NotFoundException('Invalid user name or password');
     }
-    const isMatchPassword = await bcrypt.compare(
-      registerSignUserDto.password,
+    const isMatchPassword = await argon2.verify(
       user.password,
+      registerSignUserDto.password,
     );
 
     if (!isMatchPassword) {
